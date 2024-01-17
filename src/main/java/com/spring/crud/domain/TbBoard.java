@@ -1,9 +1,9 @@
 package com.spring.crud.domain;
 
-import com.spring.crud.dto.TbBoardCreateResponceDto;
+import com.spring.crud.dto.TbBoardCreateResponseDto;
+import com.spring.crud.dto.TbBoardUpdateResponseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.Getter;
@@ -37,8 +37,16 @@ public class TbBoard extends AuditingFields {
         return new TbBoard(title, content);
     }
 
-    public TbBoardCreateResponceDto toResponceDto() {
-        return TbBoardCreateResponceDto.builder()
+    public TbBoardCreateResponseDto toCreateResponseDto() {
+        return TbBoardCreateResponseDto.builder()
+                .title(title)
+                .content(content)
+                .build();
+    }
+    public TbBoardUpdateResponseDto toUpdateResponseDto() {
+        return TbBoardUpdateResponseDto.builder()
+                .id(super.getId())
+                .deleted(super.getDeleted())
                 .title(title)
                 .content(content)
                 .build();

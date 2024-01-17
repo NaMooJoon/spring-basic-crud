@@ -8,22 +8,19 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 
+@Builder
 @Getter
-public class TbBoardCreateResponceDto {
+public class TbBoardUpdateResponseDto {
+
+    @Schema(description = "id", example = "length32textnumber")
+    private String id;
 
     @Schema(description = "title", example = "Post Title...")
-    @NotNull
-    @NotEmpty
-    @Size(max = 100)
     private String title;
 
-    @Schema(description = "content", example = "Content is ...")
-    @Size(max = 10_000)
-    private String content;
+    @Schema(description = "deleted", example = "Y")
+    private String deleted;
 
-    @Builder
-    public TbBoardCreateResponceDto(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
+    @Schema(description = "content", example = "Content is ...")
+    private String content;
 }

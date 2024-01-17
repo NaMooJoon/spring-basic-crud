@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.crud.mapper.TbBoardMapper">
+
+    <select id="get" parameterType="hashMap" resultType="com.spring.crud.dto.TbBoardSelectResponseDto">
+           SELECT tb_board.id
+                , tb_board.title
+                , tb_board.content
+                , tb_board.deleted
+           FROM tb_board
+           WHERE tb_board.id = #{id}
+    </select>
+
+</mapper>
