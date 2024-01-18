@@ -51,7 +51,6 @@
         contentType: 'application/json; charset=utf-8',
         cache: false,
         success: (data, status, xhr) => {
-            alert("data : " + JSON.stringify(data));
             document.getElementById("update_title").value = data.title;
             document.getElementById("update_content").value = data.content;
             document.getElementById("update_deleted").checked = (data.deleted == "N")? false : true;
@@ -62,7 +61,8 @@
     })
 
     function cancel_update() {
-        window.location.href = 'index';
+        // window.location.href = 'index';
+        history.back();
     }
 
     function upload_board() {
