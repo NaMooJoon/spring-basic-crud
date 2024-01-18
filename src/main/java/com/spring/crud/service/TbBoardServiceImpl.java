@@ -3,12 +3,14 @@ package com.spring.crud.service;
 import com.spring.crud.domain.TbBoard;
 import com.spring.crud.dto.TbBoardCreateRequestDto;
 import com.spring.crud.dto.TbBoardCreateResponseDto;
+import com.spring.crud.dto.TbBoardListRequestDto;
 import com.spring.crud.dto.TbBoardSelectResponseDto;
 import com.spring.crud.dto.TbBoardUpdateRequestDto;
 import com.spring.crud.dto.TbBoardUpdateResponseDto;
 import com.spring.crud.mapper.TbBoardMapper;
 import com.spring.crud.repository.TbBoardRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +54,10 @@ public class TbBoardServiceImpl implements TbBoardService {
     @Override
     public TbBoardSelectResponseDto get(String id) {
         return tbBoardMapper.get(id);
+    }
+
+    @Override
+    public List<TbBoardSelectResponseDto> list(TbBoardListRequestDto params) {
+        return tbBoardMapper.getList(params);
     }
 }

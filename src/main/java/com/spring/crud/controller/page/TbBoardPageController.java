@@ -20,4 +20,9 @@ public class TbBoardPageController {
         model.addAttribute("id", id);
         return "board/update";
     }
+
+    @GetMapping("/list")
+    public String list() {
+        return "board/list";
+    }
 }

@@ -2,12 +2,14 @@ package com.spring.crud.controller;
 
 import com.spring.crud.dto.TbBoardCreateRequestDto;
 import com.spring.crud.dto.TbBoardCreateResponseDto;
+import com.spring.crud.dto.TbBoardListRequestDto;
 import com.spring.crud.dto.TbBoardSelectResponseDto;
 import com.spring.crud.dto.TbBoardUpdateRequestDto;
 import com.spring.crud.dto.TbBoardUpdateResponseDto;
 import com.spring.crud.service.TbBoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,5 +67,16 @@ public class TbBoardRestController {
     public ResponseEntity<TbBoardSelectResponseDto> get(@PathVariable("id") String id) {
         TbBoardSelectResponseDto tbBoardSelectResponseDto = tbBoardService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(tbBoardSelectResponseDto);
+    }
+
+    @Operation(summary = "게시 글 전체 목록 조회 (검색 기능 포함)",
+            description = "게시판 글 전체 목록 조회를 위한 컨트롤러 <br />"
+                    + "@param (no parameter) <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
+                    + "@exception (no exception) <br />")
+    @PostMapping("/list")
+    public ResponseEntity<List<TbBoardSelectResponseDto>> list(@RequestBody TbBoardListRequestDto params) {
+        List<TbBoardSelectResponseDto> tbBoardSelectResponseDtoList = tbBoardService.list(params);
+        return ResponseEntity.status(HttpStatus.OK).body(tbBoardSelectResponseDtoList);
     }
 }

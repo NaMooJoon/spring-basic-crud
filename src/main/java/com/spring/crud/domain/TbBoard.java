@@ -13,7 +13,9 @@ import lombok.ToString;
 @Getter
 @ToString(callSuper = true)
 @Table(indexes = {
-        @Index(columnList = "title")
+        @Index(columnList = "title"),
+        @Index(columnList = "createdAt"),
+        @Index(columnList = "modifiedAt")
 })
 @Entity
 public class TbBoard extends AuditingFields {

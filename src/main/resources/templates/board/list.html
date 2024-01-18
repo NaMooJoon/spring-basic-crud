@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        button {
+            padding: 2px;
+            cursor: pointer;
+        }
+        .right-pos {
+            position: relative;
+            float: right;
+        }
+        .body-div {
+            width: 90%;
+        }
+        label {
+        }
+        table {
+            border: 2px;
+            /*border-collapse: collapse;*/
+        }
+    </style>
+</head>
+<body>
+<h1>Board List Viewer Page</h1>
+<div class="body-div">
+    <fieldset>
+        <legend>Choose post's keywords and status:</legend>
+    <div>
+        <label for="keyword_title">Search Title's Keywords:</label>
+        <input id="keyword_title" name="title" value=""/>
+    </div>
+    <div>
+            <label for="keyword_deleted">Delete</label>
+            <input id="keyword_deleted" />
+    </div>
+    <div class="right-pos">
+        <button id="btn-search" onclick="search_board();">Search</button>
+        <button id="btn-cancel" onclick="cancel_search();">Cancel</button>
+    </div>
+    </fieldset>
+</div>
+
+<!-- view tables -->
+<table style="width: 85%">
+    <thead>
+        <tr>
+            <th style="width: 5%">Index</th>
+            <th style="width: 20%">Title</th>
+            <th style="width: 55%">Content</th>
+            <th style="width: 15%">Created At</th>
+            <th style="width: 5%">Deleted</th>
+        </tr>
+    </thead>
+    <tbody id="table-body">
+        <!--ajax response -->
+    </tbody>
+</table>
+
+<script>
+    function cancel_search() {
+        // window.location.href = 'index';
+        history.back();
+    }
+
+    function search_board() {
+        $.ajax({
+            url: "/api/board/list",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'title': $('#keyword_title').val(),
+                'deleted': $('#keyword_deleted').val()
+            }),
+            cache: false,
+            success: (data) => {
+                let tableBodyStr = "";
+                for (var i = 0; i < data.length; i++) {
+                    tableBodyStr += "<tr>" +
+                        `<td style='text-align: center'>${i + 1}</tda>` +
+                        `<td>${data[i].title}</td>` +
+                        `<td>${data[i].content}</td>` +
+                        `<td>${(data[i].createdAt + '').slice(5, -10)}</td>` +
+                        `<td style='text-align: center'>${data[i].deleted}</td>` +
+                        `<td><a href='/board/update/${data[i].id}'>edit</a> </td>` +
+                        "</tr>";
+                }
+                $('#table-body').html('');
+                $('#table-body').append(tableBodyStr);
+            },
+            error: (data) => {
+                alert("error" + JSON.stringify(data));
+            },
+        });
+    }
+    search_board();
+</script>
+</body>
+</html>

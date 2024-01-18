@@ -2,9 +2,11 @@ package com.spring.crud.service;
 
 import com.spring.crud.dto.TbBoardCreateRequestDto;
 import com.spring.crud.dto.TbBoardCreateResponseDto;
+import com.spring.crud.dto.TbBoardListRequestDto;
 import com.spring.crud.dto.TbBoardSelectResponseDto;
 import com.spring.crud.dto.TbBoardUpdateRequestDto;
 import com.spring.crud.dto.TbBoardUpdateResponseDto;
+import java.util.List;
 
 public interface TbBoardService {
 
@@ -13,4 +15,6 @@ public interface TbBoardService {
     public TbBoardUpdateResponseDto update(TbBoardUpdateRequestDto params);
 
     public TbBoardSelectResponseDto get(String id);
+
+    public List<TbBoardSelectResponseDto> list(TbBoardListRequestDto params);
 }
