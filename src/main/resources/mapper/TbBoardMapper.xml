@@ -3,12 +3,26 @@
 <mapper namespace="com.spring.crud.mapper.TbBoardMapper">
 
     <select id="get" parameterType="hashMap" resultType="com.spring.crud.dto.TbBoardSelectResponseDto">
-           SELECT tb_board.id
-                , tb_board.title
-                , tb_board.content
-                , tb_board.deleted
-           FROM tb_board
-           WHERE tb_board.id = #{id}
+        SELECT tb_board.id
+            , tb_board.title
+            , tb_board.content
+            , tb_board.deleted
+        FROM tb_board
+        WHERE tb_board.id = #{id}
+    </select>
+
+    <select id="getList" parameterType="com.spring.crud.dto.TbBoardListRequestDto" resultType="com.spring.crud.dto.TbBoardSelectResponseDto">
+        SELECT tb_board.id
+             , tb_board.title
+             , tb_board.content
+             , tb_board.deleted
+             , tb_board.created_at AS createdAt
+             , tb_board.modified_at AS modifiedAt
+        FROM tb_board
+        WHERE tb_board.id is not null
+        <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>
+        <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>
+        ORDER BY tb_board.created_at DESC
     </select>
 
 </mapper>
