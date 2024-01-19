@@ -2,7 +2,7 @@ package com.spring.crud.controller;
 
 import com.spring.crud.dto.TbBoardDto.*;
 import com.spring.crud.dto.TbBoardDto.TbBoardPagedRequestDto;
-import com.spring.crud.dto.TbBoardScrollListRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardScrollListRequestDto;
 import com.spring.crud.dto.common.CommonPagedListResponseDto;
 import com.spring.crud.service.TbBoardService;
 import io.swagger.v3.oas.annotations.Operation;

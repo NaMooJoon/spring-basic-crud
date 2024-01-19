@@ -2,6 +2,7 @@ package com.spring.crud.dto;
 
 import com.spring.crud.domain.TbBoard;
 import com.spring.crud.dto.common.CommonPagedListRequestDto;
+import com.spring.crud.dto.common.CommonScrollListRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -150,6 +151,19 @@ public class TbBoardDto {
         private String title;
 
         @Schema(description = "deleted", example = "Y")
+        private String deleted;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TbBoardScrollListRequestDto extends CommonScrollListRequestDto {
+
+        @Schema(description = "title", example = "title is ...")
+        private String title;
+
+        @Schema(description = "deleted", example = "N")
         private String deleted;
     }
 }

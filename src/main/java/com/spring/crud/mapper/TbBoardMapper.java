@@ -3,7 +3,7 @@ package com.spring.crud.mapper;
 import com.spring.crud.dto.TbBoardDto.TbBoardListRequestDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardPagedRequestDto;
-import com.spring.crud.dto.TbBoardScrollListRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardScrollListRequestDto;
 import java.util.List;
 
 public interface TbBoardMapper {

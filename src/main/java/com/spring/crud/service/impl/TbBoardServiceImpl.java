@@ -1,4 +1,4 @@
-package com.spring.crud.service;
+package com.spring.crud.service.impl;
 
 import com.spring.crud.domain.TbBoard;
 import com.spring.crud.dto.TbBoardDto.TbBoardCreateRequestDto;
@@ -8,10 +8,11 @@ import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardUpdateRequestDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardUpdateResponseDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardPagedRequestDto;
-import com.spring.crud.dto.TbBoardScrollListRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardScrollListRequestDto;
 import com.spring.crud.dto.common.CommonPagedListResponseDto;
 import com.spring.crud.mapper.TbBoardMapper;
 import com.spring.crud.repository.TbBoardRepository;
+import com.spring.crud.service.TbBoardService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

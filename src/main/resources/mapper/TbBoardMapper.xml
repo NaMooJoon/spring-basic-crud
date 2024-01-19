@@ -55,7 +55,7 @@
         <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>
     </select>
 
-    <select id="getScroll" parameterType="com.spring.crud.dto.TbBoardScrollListRequestDto" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">
+    <select id="getScroll" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardScrollListRequestDto" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">
         SELECT tb_board.id
         , tb_board.title
         , tb_board.content
