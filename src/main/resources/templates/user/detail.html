@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Detail</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    button {
+      padding: 2px;
+      cursor: pointer;
+    }
+    .body-div {
+      width: 70%;
+    }
+    .right-pos {
+      padding-top: 10px;
+      position: relative;
+      float: right;
+    }
+    .req {
+      color: red;
+    }
+    label {
+    }
+    .search-div {
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<h1>User's Detail Information</h1>
+<div class="body-div">
+
+  <form>
+    <fieldset>
+      <legend>Find by ID:</legend>
+      <div class="search-div">
+        <label for="detail_id">ID<span class="req">*</span>: </label>
+        <input id="detail_id" required/>
+        <br>
+        <small>Ex) 8a80574cc27a42bdb6b9b5641ede0c52</small>
+      </div>
+      <div class="right-pos">
+        <button type="button" onclick="detail_user()">find</button>
+      </div>
+    </fieldset>
+  </form>
+</div>
+
+이미지<div id="image" class="body-div">-</div>
+이메일<div id="email" class="body-div">-</div>
+닉네임<div id="nick" class="body-div">-</div>
+이름<div id="name" class="body-div">-</div>
+전화번호<div id="phone" class="body-div">-</div>
+가입날짜<div id="created_at" class="body-div">-</div>
+
+<script>
+  function detail_user(){
+    $.ajax({
+      url: "/api/user/" + $("#detail_id").val(),
+      type: "GET",
+      contentType : 'application/json; charset=utf-8',
+      cache: false,
+      success: (data)=>{
+        alert("data : " + JSON.stringify(data));
+        if (data.image != null || data.image != '') {
+          $('#image').html(`<img style="width: 250px" src=${data.image} alt="profile image">`);
+        }
+        $('#email').html(data.uid);
+        $('#nick').html(data.nick);
+        $('#name').html(data.name);
+        $('#phone').html(data.phone);
+        $('#created_at').html(data.created_at);
+      },
+      error: (data)=>{
+        console.log("error");
+        alert(JSON.stringify(data));
+      },
+    });
+  }
+</script>
+</body>
+</html>

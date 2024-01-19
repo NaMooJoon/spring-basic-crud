@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Join</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        button {
+            padding: 2px;
+            cursor: pointer;
+        }
+        .body-div {
+            width: 70%;
+        }
+        .right-pos {
+            padding-top: 10px;
+            position: relative;
+            float: right;
+        }
+        *:required {
+            background-color: palegoldenrod;
+        }
+        .req {
+            color: red;
+        }
+        label {
+        }
+        .search-div {
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Join Page For New User</h1>
+<div class="body-div">
+    <form>
+        <fieldset>
+            <legend>Input your ID & PW:</legend>
+            <div class="search-div">
+                <label for="create_id">ID<span class="req">*</span>: </label>
+                <input id="create_id" required/>
+            </div>
+            <div class="search-div">
+                <label for="create_pw">PW<span class="req">*</span>: </label>
+                <input id="create_pw" required />
+            </div>
+            <div class="search-div">
+                <label for="create_nick">Nick name<span class="req">*</span>: </label>
+                <input id="create_nick" required />
+            </div>
+            <div class="search-div">
+                <label for="name">Real name: </label>
+                <input id="name"/>
+            </div>
+            <div class="search-div">
+                <label for="phone">Phone number: </label>
+                <input type="tel" id="phone"/>
+            </div>
+        </fieldset>
+        <div class="right-pos">
+            <input type="submit" onclick="create_user()" />
+        </div>
+    </form>
+</div>
+<script>
+    function create_user(){
+        $.ajax({
+            url: "/api/user",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'uid' : $("#create_id").val(),
+                'pw': $("#create_pw").val(),
+                'nick': $("#create_nick").val(),
+                'name': $("#name").val(),
+                'phone': $("#phone").val(),
+                'joinFrom': "basic"
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                alert("data : " + JSON.stringify(data));
+            },
+            error: (data)=>{
+                alert(JSON.stringify(data));
+            },
+        });
+
+    }
+
+</script>
+</body>
+</html>

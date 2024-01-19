@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.crud.mapper.TbUserMapper">
+
+    <select id="detail" parameterType="hashMap" resultType="com.spring.crud.dto.TbUserAfterSelectDto">
+        SELECT tb_user.id
+             ,tb_user.uid
+             ,tb_user.nick
+             ,tb_user.join_from AS joinFrom
+             ,tb_user.name
+             ,tb_user.process
+             ,tb_user.phone
+             ,tb_user.image
+             ,tb_user.deleted
+             ,tb_user.created_at AS createdAt
+             ,tb_user.modified_at As modifiedAt
+        FROM tb_user
+        WHERE tb_user.id = #{id}
+    </select>
+
+<!--    <select id="getList" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardListRequestDto" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">-->
+<!--        SELECT tb_board.id-->
+<!--             , tb_board.title-->
+<!--             , tb_board.content-->
+<!--             , tb_board.deleted-->
+<!--             , tb_board.created_at AS createdAt-->
+<!--             , tb_board.modified_at AS modifiedAt-->
+<!--        FROM tb_board-->
+<!--        WHERE tb_board.id is not null-->
+<!--        <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>-->
+<!--        <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>-->
+<!--        ORDER BY tb_board.created_at DESC-->
+<!--    </select>-->
+
+<!--    <select id="getPaged" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardPageListRequest" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">-->
+<!--        SELECT tb_board.id-->
+<!--        , tb_board.title-->
+<!--        , tb_board.content-->
+<!--        , tb_board.deleted-->
+<!--        , tb_board.created_at AS createdAt-->
+<!--        , tb_board.modified_at AS modifiedAt-->
+<!--        FROM tb_board-->
+<!--        WHERE tb_board.id is not null-->
+<!--        <if test="beginDate != null and beginDate != ''">AND tb_board.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>-->
+<!--        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.created_at</if>-->
+<!--        <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>-->
+<!--        <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>-->
+<!--        <if test="orderBy == 'createAt'">ORDER BY createdAt </if>-->
+<!--        <if test="orderBy == 'title'">ORDER BY tb_board.title </if>-->
+<!--        <if test="orderWay == 'asc'">ASC</if>-->
+<!--        <if test="orderWay == 'desc'">DESC</if>-->
+<!--        LIMIT #{offset}, #{perPage}-->
+<!--    </select>-->
+
+<!--    <select id="getPagedCount" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardPageListRequest" resultType="Integer">-->
+<!--        SELECT COUNT(tb_board.id) as listSize-->
+<!--        FROM tb_board-->
+<!--        WHERE tb_board.id is not null-->
+<!--        <if test="beginDate != null and beginDate != ''">AND tb_board.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>-->
+<!--        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.created_at</if>-->
+<!--        <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>-->
+<!--        <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>-->
+<!--    </select>-->
+
+<!--    <select id="getScroll" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardScrollListRequestDto" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">-->
+<!--        SELECT tb_board.id-->
+<!--        , tb_board.title-->
+<!--        , tb_board.content-->
+<!--        , tb_board.deleted-->
+<!--        , tb_board.created_at AS createdAt-->
+<!--        , tb_board.modified_at AS modifiedAt-->
+<!--        FROM tb_board-->
+<!--        WHERE tb_board.id is not null-->
+<!--        <if test="beginDate != null and beginDate != ''">AND tb_board.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>-->
+<!--        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.created_at</if>-->
+<!--        <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>-->
+<!--        <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>-->
+<!--        <if test="searchDate != null and searchDate != ''">-->
+<!--            <if test="searchWay == 'backwards'"> AND tb_board.created_at > STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tb_board.created_at ASC</if>-->
+<!--            <if test="searchWay == 'forwards'">AND STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') > tb_board.created_at ORDER BY tb_board.created_at DESC</if>-->
+<!--        </if>-->
+<!--        LIMIT 0, #{requestBoardSize}-->
+<!--    </select>-->
+
+</mapper>
