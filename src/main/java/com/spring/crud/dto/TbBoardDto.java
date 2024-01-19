@@ -1,6 +1,7 @@
 package com.spring.crud.dto;
 
 import com.spring.crud.domain.TbBoard;
+import com.spring.crud.dto.common.CommonPagedListRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 public class TbBoardDto {
     @Getter
@@ -124,5 +126,30 @@ public class TbBoardDto {
 
         @Schema(description = "content", example = "Content is ...")
         private String content;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TbBoardPagedRequestDto extends CommonPagedListRequestDto {
+
+        @Schema(description = "title", example = "title")
+        private String title;
+
+        @Schema(description = "delete", example = "N")
+        private String deleted;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class TbBoardPageListRequest extends CommonPagedListRequestDto {
+
+        @Schema(description = "title", example = "title")
+        private String title;
+
+        @Schema(description = "deleted", example = "Y")
+        private String deleted;
     }
 }

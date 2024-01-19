@@ -7,7 +7,8 @@ import com.spring.crud.dto.TbBoardDto.TbBoardListRequestDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardUpdateRequestDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardUpdateResponseDto;
-import com.spring.crud.dto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.TbBoardScrollListRequestDto;
 import com.spring.crud.dto.common.CommonPagedListResponseDto;
 import com.spring.crud.mapper.TbBoardMapper;
 import com.spring.crud.repository.TbBoardRepository;
@@ -69,5 +70,11 @@ public class TbBoardServiceImpl implements TbBoardService {
         int[] arguments = params.afterBuild(listCount);
 
         return new CommonPagedListResponseDto<>(arguments, tbBoardMapper.getPaged(params));
+    }
+
+    @Override
+    public List<TbBoardSelectResponseDto> scroll(TbBoardScrollListRequestDto params) {
+        System.out.println("\n========> " + params.getSearchDate());
+        return tbBoardMapper.getScroll(params);
     }
 }

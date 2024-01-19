@@ -2,7 +2,8 @@ package com.spring.crud.mapper;
 
 import com.spring.crud.dto.TbBoardDto.TbBoardListRequestDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
-import com.spring.crud.dto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.TbBoardScrollListRequestDto;
 import java.util.List;
 
 public interface TbBoardMapper {
@@ -13,4 +14,6 @@ public interface TbBoardMapper {
     List<TbBoardSelectResponseDto> getPaged(TbBoardPagedRequestDto params);
 
     Integer getPagedCount(TbBoardPagedRequestDto params);
+
+    List<TbBoardSelectResponseDto> getScroll(TbBoardScrollListRequestDto params);
 }

@@ -1,6 +1,6 @@
 package com.spring.crud.dto;
 
-import com.spring.crud.dto.common.CommonPagedListRequestDto;
+import com.spring.crud.dto.common.CommonScrollListRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,11 +11,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TbBoardPagedRequestDto extends CommonPagedListRequestDto {
+public class TbBoardScrollListRequestDto extends CommonScrollListRequestDto {
 
-    @Schema(description = "title", example = "title")
+    @Schema(description = "title", example = "title is ...")
     private String title;
 
-    @Schema(description = "delete", example = "N")
+    @Schema(description = "deleted", example = "N")
     private String deleted;
 }

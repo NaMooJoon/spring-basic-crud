@@ -25,7 +25,7 @@
         ORDER BY tb_board.created_at DESC
     </select>
 
-    <select id="getPaged" parameterType="com.spring.crud.dto.TbBoardPageListRequest" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">
+    <select id="getPaged" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardPageListRequest" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">
         SELECT tb_board.id
         , tb_board.title
         , tb_board.content
@@ -34,8 +34,8 @@
         , tb_board.modified_at AS modifiedAt
         FROM tb_board
         WHERE tb_board.id is not null
-        <if test="beginDate != null and beginDate != ''">AND tb_board.create_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
-        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.create_at</if>
+        <if test="beginDate != null and beginDate != ''">AND tb_board.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.created_at</if>
         <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>
         <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>
         <if test="orderBy == 'createAt'">ORDER BY createdAt </if>
@@ -45,14 +45,34 @@
         LIMIT #{offset}, #{perPage}
     </select>
 
-    <select id="getPagedCount" parameterType="com.spring.crud.dto.TbBoardPageListRequest" resultType="Integer">
+    <select id="getPagedCount" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardPageListRequest" resultType="Integer">
         SELECT COUNT(tb_board.id) as listSize
         FROM tb_board
         WHERE tb_board.id is not null
-        <if test="beginDate != null and beginDate != ''">AND tb_board.create_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
-        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.create_at</if>
+        <if test="beginDate != null and beginDate != ''">AND tb_board.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.created_at</if>
         <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>
         <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>
+    </select>
+
+    <select id="getScroll" parameterType="com.spring.crud.dto.TbBoardScrollListRequestDto" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">
+        SELECT tb_board.id
+        , tb_board.title
+        , tb_board.content
+        , tb_board.deleted
+        , tb_board.created_at AS createdAt
+        , tb_board.modified_at AS modifiedAt
+        FROM tb_board
+        WHERE tb_board.id is not null
+        <if test="beginDate != null and beginDate != ''">AND tb_board.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.created_at</if>
+        <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>
+        <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>
+        <if test="searchDate != null and searchDate != ''">
+            <if test="searchWay == 'backwards'"> AND tb_board.created_at > STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tb_board.created_at ASC</if>
+            <if test="searchWay == 'forwards'">AND STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') > tb_board.created_at ORDER BY tb_board.created_at DESC</if>
+        </if>
+        LIMIT 0, #{requestBoardSize}
     </select>
 
 </mapper>

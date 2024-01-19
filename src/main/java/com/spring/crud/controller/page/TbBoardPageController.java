@@ -30,4 +30,9 @@ public class TbBoardPageController {
     public String page() {
         return "board/page";
     }
+
+    @GetMapping("/scroll")
+    public String scroll() {
+        return "board/scroll";
+    }
 }

@@ -1,19 +1,13 @@
 package com.spring.crud.controller;
 
-import com.spring.crud.dto.TbBoardDto.TbBoardCreateRequestDto;
-import com.spring.crud.dto.TbBoardDto.TbBoardCreateResponseDto;
-import com.spring.crud.dto.TbBoardDto.TbBoardListRequestDto;
-import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
-import com.spring.crud.dto.TbBoardDto.TbBoardUpdateRequestDto;
-import com.spring.crud.dto.TbBoardDto.TbBoardUpdateResponseDto;
-import com.spring.crud.dto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.TbBoardDto.*;
+import com.spring.crud.dto.TbBoardDto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.TbBoardScrollListRequestDto;
 import com.spring.crud.dto.common.CommonPagedListResponseDto;
 import com.spring.crud.service.TbBoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -82,13 +76,23 @@ public class TbBoardRestController {
 
     @Operation(summary = "게시 글 목록 페이징 처리 (검색 기능 포함)",
             description = "게시판 글 전체 목록을 페이징 처리 한 글 조회를 위한 컨트롤러 <br />"
-                    + "@param (no parameter) <br />"
-                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
+                    + "@param (TbBoardPagedRequestDto) <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<CommonPagedListResponseDto<TbBoardSelectResponseDto>\\> <br />"
                     + "@exception (no exception) <br />")
     @PostMapping("/page")
     public ResponseEntity<CommonPagedListResponseDto<TbBoardSelectResponseDto>> pagedList(@RequestBody TbBoardPagedRequestDto params) {
-        System.out.println("\n========> " + params.getPerPage());
         CommonPagedListResponseDto<TbBoardSelectResponseDto> responseBody = tbBoardService.pagedList(params);
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+    }
+
+    @Operation(summary = "게시 글 목록 페이징 처리 (검색 기능 포함)",
+            description = "게시판 글 전체 목록을 페이징 처리 한 글 조회를 위한 컨트롤러 <br />"
+                    + "@param (no parameter) <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
+                    + "@exception (no exception) <br />")
+    @PostMapping("/scroll")
+    public ResponseEntity<List<TbBoardSelectResponseDto>> scroll(@RequestBody TbBoardScrollListRequestDto params) {
+        List<TbBoardSelectResponseDto> tbBoardSelectResponseDtoList = tbBoardService.scroll(params);
+        return ResponseEntity.status(HttpStatus.OK).body(tbBoardSelectResponseDtoList);
     }
 }
