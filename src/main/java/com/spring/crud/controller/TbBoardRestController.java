@@ -1,11 +1,13 @@
 package com.spring.crud.controller;
 
-import com.spring.crud.dto.TbBoardCreateRequestDto;
-import com.spring.crud.dto.TbBoardCreateResponseDto;
-import com.spring.crud.dto.TbBoardListRequestDto;
-import com.spring.crud.dto.TbBoardSelectResponseDto;
-import com.spring.crud.dto.TbBoardUpdateRequestDto;
-import com.spring.crud.dto.TbBoardUpdateResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardCreateRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardCreateResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardListRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardUpdateRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardUpdateResponseDto;
+import com.spring.crud.dto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.common.CommonPagedListResponseDto;
 import com.spring.crud.service.TbBoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,8 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/board")
 @RestController
 public class TbBoardRestController {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final TbBoardService tbBoardService;
 
@@ -78,5 +78,17 @@ public class TbBoardRestController {
     public ResponseEntity<List<TbBoardSelectResponseDto>> list(@RequestBody TbBoardListRequestDto params) {
         List<TbBoardSelectResponseDto> tbBoardSelectResponseDtoList = tbBoardService.list(params);
         return ResponseEntity.status(HttpStatus.OK).body(tbBoardSelectResponseDtoList);
+    }
+
+    @Operation(summary = "게시 글 목록 페이징 처리 (검색 기능 포함)",
+            description = "게시판 글 전체 목록을 페이징 처리 한 글 조회를 위한 컨트롤러 <br />"
+                    + "@param (no parameter) <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
+                    + "@exception (no exception) <br />")
+    @PostMapping("/page")
+    public ResponseEntity<CommonPagedListResponseDto<TbBoardSelectResponseDto>> pagedList(@RequestBody TbBoardPagedRequestDto params) {
+        System.out.println("\n========> " + params.getPerPage());
+        CommonPagedListResponseDto<TbBoardSelectResponseDto> responseBody = tbBoardService.pagedList(params);
+        return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }

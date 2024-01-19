@@ -19,8 +19,17 @@
         label {
         }
         table {
-            border: 2px;
-            /*border-collapse: collapse;*/
+            width: 100%;
+            border-top: 1px solid #444444;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid #444444;
+            border-left: 1px solid #444444;
+            padding: 10px;
+        }
+        th:first-child, td:first-child {
+            border-left: none;
         }
     </style>
 </head>
@@ -45,14 +54,15 @@
 </div>
 
 <!-- view tables -->
-<table style="width: 85%">
+<table style="width: 90%">
     <thead>
         <tr>
-            <th style="width: 5%">Index</th>
+            <th style="width: 3%">Index</th>
             <th style="width: 20%">Title</th>
             <th style="width: 55%">Content</th>
             <th style="width: 15%">Created At</th>
             <th style="width: 5%">Deleted</th>
+            <th style="width: 2%">-</th>
         </tr>
     </thead>
     <tbody id="table-body">
@@ -88,8 +98,7 @@
                         `<td><a href='/board/update/${data[i].id}'>edit</a> </td>` +
                         "</tr>";
                 }
-                $('#table-body').html('');
-                $('#table-body').append(tableBodyStr);
+                $('#table-body').html(tableBodyStr);
             },
             error: (data) => {
                 alert("error" + JSON.stringify(data));

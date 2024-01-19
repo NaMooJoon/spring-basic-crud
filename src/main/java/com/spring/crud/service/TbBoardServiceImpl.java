@@ -1,12 +1,14 @@
 package com.spring.crud.service;
 
 import com.spring.crud.domain.TbBoard;
-import com.spring.crud.dto.TbBoardCreateRequestDto;
-import com.spring.crud.dto.TbBoardCreateResponseDto;
-import com.spring.crud.dto.TbBoardListRequestDto;
-import com.spring.crud.dto.TbBoardSelectResponseDto;
-import com.spring.crud.dto.TbBoardUpdateRequestDto;
-import com.spring.crud.dto.TbBoardUpdateResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardCreateRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardCreateResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardListRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardUpdateRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardUpdateResponseDto;
+import com.spring.crud.dto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.common.CommonPagedListResponseDto;
 import com.spring.crud.mapper.TbBoardMapper;
 import com.spring.crud.repository.TbBoardRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -59,5 +61,13 @@ public class TbBoardServiceImpl implements TbBoardService {
     @Override
     public List<TbBoardSelectResponseDto> list(TbBoardListRequestDto params) {
         return tbBoardMapper.getList(params);
+    }
+
+    @Override
+    public CommonPagedListResponseDto<TbBoardSelectResponseDto> pagedList(TbBoardPagedRequestDto params) {
+        int listCount = tbBoardMapper.getPagedCount(params);
+        int[] arguments = params.afterBuild(listCount);
+
+        return new CommonPagedListResponseDto<>(arguments, tbBoardMapper.getPaged(params));
     }
 }

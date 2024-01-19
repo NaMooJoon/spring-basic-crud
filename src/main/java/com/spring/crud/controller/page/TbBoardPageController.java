@@ -25,4 +25,9 @@ public class TbBoardPageController {
     public String list() {
         return "board/list";
     }
+
+    @GetMapping("/page")
+    public String page() {
+        return "board/page";
+    }
 }

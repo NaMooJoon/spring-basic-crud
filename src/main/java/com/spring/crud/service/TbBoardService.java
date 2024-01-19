@@ -1,20 +1,24 @@
 package com.spring.crud.service;
 
-import com.spring.crud.dto.TbBoardCreateRequestDto;
-import com.spring.crud.dto.TbBoardCreateResponseDto;
-import com.spring.crud.dto.TbBoardListRequestDto;
-import com.spring.crud.dto.TbBoardSelectResponseDto;
-import com.spring.crud.dto.TbBoardUpdateRequestDto;
-import com.spring.crud.dto.TbBoardUpdateResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardCreateRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardCreateResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardListRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardUpdateRequestDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardUpdateResponseDto;
+import com.spring.crud.dto.TbBoardPagedRequestDto;
+import com.spring.crud.dto.common.CommonPagedListResponseDto;
 import java.util.List;
 
 public interface TbBoardService {
 
-    public TbBoardCreateResponseDto create(TbBoardCreateRequestDto params);
+    TbBoardCreateResponseDto create(TbBoardCreateRequestDto params);
 
-    public TbBoardUpdateResponseDto update(TbBoardUpdateRequestDto params);
+    TbBoardUpdateResponseDto update(TbBoardUpdateRequestDto params);
 
-    public TbBoardSelectResponseDto get(String id);
+    TbBoardSelectResponseDto get(String id);
 
-    public List<TbBoardSelectResponseDto> list(TbBoardListRequestDto params);
+    List<TbBoardSelectResponseDto> list(TbBoardListRequestDto params);
+
+    CommonPagedListResponseDto<TbBoardSelectResponseDto> pagedList(TbBoardPagedRequestDto params);
 }

@@ -1,7 +1,7 @@
 package com.spring.crud.domain;
 
-import com.spring.crud.dto.TbBoardCreateResponseDto;
-import com.spring.crud.dto.TbBoardUpdateResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardCreateResponseDto;
+import com.spring.crud.dto.TbBoardDto.TbBoardUpdateResponseDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;

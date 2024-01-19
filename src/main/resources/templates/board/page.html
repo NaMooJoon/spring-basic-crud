@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        button {
+            padding: 2px;
+            cursor: pointer;
+        }
+        .right-pos {
+            position: relative;
+            float: right;
+        }
+        .body-div {
+            width: 90%;
+        }
+        label {
+        }
+        table {
+            width: 100%;
+            border-top: 1px solid #444444;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid #444444;
+            border-left: 1px solid #444444;
+            padding: 10px;
+        }
+        th:first-child, td:first-child {
+            border-left: none;
+        }
+        .search-div {
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Board Page List Viewer Page</h1>
+<div class="body-div">
+    <fieldset>
+        <legend>Choose filter's keyword for finding proper posts:</legend>
+        <div class="search-div">
+            <label for="keyword_title">Search Title's Keywords:</label>
+            <input id="keyword_title" name="title" value=""/>
+        </div>
+        <div class="search-div">
+            <label for="keyword_deleted">Delete</label>
+            <select id="keyword_deleted">
+                <option value="" selected="selected">Any</option>
+                <option value="N">N</option>
+                <option value="Y">Y</option>
+            </select>
+        </div>
+        <div class="search-div">
+            <label for="search_call_page">Request Page</label>
+            <select id="search_call_page">
+                <option value="1" selected="selected">1</option>
+            </select>
+<!--            <input id="search_call_page" value="1"/>-->
+            <label for="search_per_page">Page Size</label>
+            <input id="search_per_page" value="10"/>
+        </div>
+        <div class="search-div">
+            <label for="search_begin_date">Begin Date</label>
+            <input id="search_begin_date" type="date" />
+            <label for="search_end_date">End Date</label>
+            <input id="search_end_date" type="date" />
+        </div>
+        <div class="search-div">
+            <label for="search_order_by">Order By</label>
+            <select id="search_order_by">
+                <option value="createAt" selected="selected">Created Time</option>
+                <option value="title">Title</option>
+            </select>
+            <label for="search_order_way">Order Way</label>
+            <select name="order_way" id="search_order_way">
+                <option value="desc" selected="selected">DESC</option>
+                <option value="asc">ASD</option>
+            </select>
+        </div>
+        <div class="right-pos">
+            <button id="btn-search" onclick="search_board();">Search</button>
+            <button id="btn-cancel" onclick="cancel_search();">Cancel</button>
+        </div>
+    </fieldset>
+</div>
+<div>
+    <label for="total_page">Total Page</label>
+    <button id="total_page">-</button> /
+    <label for="total_post">Total Posted Board</label>
+    <button id="total_post">-</button>
+</div>
+<!-- view tables -->
+<table style="width: 90%">
+    <thead>
+        <tr>
+            <th style="width: 3%">Index</th>
+            <th style="width: 20%">Title</th>
+            <th style="width: 55%">Content</th>
+            <th style="width: 15%">Created At</th>
+            <th style="width: 5%">Deleted</th>
+            <th style="width: 2%">-</th>
+        </tr>
+    </thead>
+    <tbody id="table-body">
+        <!--ajax response -->
+    </tbody>
+</table>
+
+<script>
+    function cancel_search() {
+        history.back();
+    }
+
+    function search_board() {
+        $.ajax({
+            url: "/api/board/page",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'title': $('#keyword_title').val(),
+                'deleted': $('#keyword_deleted').val(),
+                'beginDate': $('#search_begin_date').val(),
+                'endDate': $('#search_end_date').val(),
+                'callPage': $('#search_call_page').val(),
+                'perPage': $('#search_per_page').val(),
+                'orderBy': $('#search_order_by').val(),
+                'orderWay': $('#search_order_way').val(),
+            }),
+            cache: false,
+            success: (data) => {
+                let list = data.list;
+                $('#table-body').html('');
+                for (var i = 0; i < list.length; i++) {
+                    let tableBodyStr = "<tr>" +
+                        `<td style='text-align: center'>${i + 1}</tda>` +
+                        `<td>${list[i].title}</td>` +
+                        `<td>${list[i].content}</td>` +
+                        `<td>${(list[i].createdAt + '').slice(5, -10)}</td>` +
+                        `<td style='text-align: center'>${list[i].deleted}</td>` +
+                        `<td><a href='/board/update/${list[i].id}'>edit</a> </td>` +
+                        "</tr>";
+                    $('#table-body').append(tableBodyStr);
+                }
+                $('#search_call_page').html('<option value="1">1</option>');
+                for (var pageNum = 2; pageNum <= data.lastPage; pageNum++) {
+                    if (data.callPage == pageNum) {
+                        $('#search_call_page').append(`<option value=\"${pageNum}\" selected="selected">${pageNum}</option>`);
+                        continue;
+                    }
+                    $('#search_call_page').append(`<option value=\"${pageNum}\">${pageNum}</option>`);
+                }
+                $('#total_page').html(`${data.lastPage}`);
+                $('#total_post').html(`${data.listSize}`);
+            },
+            error: (data) => {
+                alert("error" + JSON.stringify(data));
+            },
+        });
+    }
+    search_board();
+</script>
+</body>
+</html>
