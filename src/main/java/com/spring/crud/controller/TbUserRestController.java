@@ -1,14 +1,17 @@
 package com.spring.crud.controller;
 
 import com.spring.crud.dto.TbUserAfterCreateDto;
+import com.spring.crud.dto.TbUserAfterListSelectDto;
 import com.spring.crud.dto.TbUserAfterSelectDto;
 import com.spring.crud.dto.TbUserAfterUpdateDto;
 import com.spring.crud.dto.TbUserCreateDto;
+import com.spring.crud.dto.TbUserListSelectDto;
 import com.spring.crud.dto.TbUserUpdateDto;
 import com.spring.crud.service.TbUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,9 +57,27 @@ public class TbUserRestController {
         return ResponseEntity.status(HttpStatus.OK).body(tbUserAfterSelectDto);
     }
 
+    @Operation(summary = "회원 정보 수정",
+            description = "회원 기존 정보 수정을 위한 컨트롤러 (누구나 접근 가능) <br />"
+                    + "@param TbuserUpdateDto <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserAfterUpdateDto\\> <br />"
+                    + "@exception 해당 자료 없음 <br />"
+    )
     @PutMapping("")
     public ResponseEntity<TbUserAfterUpdateDto> update(@Valid @RequestBody TbUserUpdateDto params) {
         TbUserAfterUpdateDto tbUserAfterUpdateDto = tbUserService.update(params);
         return ResponseEntity.status(HttpStatus.OK).body(tbUserAfterUpdateDto);
+    }
+
+    @Operation(summary = "회원 정보 목록 조회(검색 기능 포함)",
+            description = "회원 정보 전체 목록 조회를 위한 컨트롤러 (모두 접근 가능) <br />"
+                    + "@param (no parameter) <br />"
+                    + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserSelectDto\\> <br />"
+                    + "@exception (no Exception) <br />"
+    )
+    @PostMapping("/list")
+    public ResponseEntity<List<TbUserAfterListSelectDto>> list(@Valid @RequestBody TbUserListSelectDto params) {
+        List<TbUserAfterListSelectDto> tbUserAfterListSelectDto = tbUserService.list(params);
+        return ResponseEntity.status(HttpStatus.OK).body(tbUserAfterListSelectDto);
     }
 }

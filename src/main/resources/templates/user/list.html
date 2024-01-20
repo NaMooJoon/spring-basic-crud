@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        button {
+            padding: 2px;
+            cursor: pointer;
+        }
+        .right-pos {
+            position: relative;
+            float: right;
+        }
+        .body-div {
+            width: 90%;
+        }
+        label {
+        }
+        table {
+            width: 100%;
+            border-top: 1px solid #444444;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid #444444;
+            border-left: 1px solid #444444;
+            padding: 10px;
+        }
+        th:first-child, td:first-child {
+            border-left: none;
+        }
+        .search-div {
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>User List Viewer Page</h1>
+<div class="body-div">
+    <form>
+        <fieldset>
+            <legend>Choose user's keywords for search</legend>
+            <div class="search-div">
+                <label for="_join_from">Join from</label>
+                <select id="_join_from">
+                    <option value="" selected="selected">Any</option>
+                    <option value="basic">Basic</option>
+                    <option value="naver">Naver</option>
+                    <option value="google">Google</option>
+                </select>
+                <label for="_deleted">Delete</label>
+                <select id="_deleted">
+                    <option value="" selected="selected">Any</option>
+                    <option value="N">N</option>
+                    <option value="Y">Y</option>
+                </select>
+            </div>
+            <div class="search-div">
+                <label for="_nick">Nick name: </label>
+                <input id="_nick" />
+            </div>
+            <div class="search-div">
+                <label for="_name">Real name: </label>
+                <input id="_name"/>
+            </div>
+            <div class="search-div">
+                <label for="_phone">Phone number: </label>
+                <input type="tel" id="_phone"/>
+            </div>
+        </fieldset>
+        <div class="right-pos">
+            <button type="button" onclick="search_user()">Search</button>
+            <button type="button" onclick="cancel_search()">Cancel</button>
+        </div>
+    </form>
+</div>
+
+<!-- view tables -->
+<table style="width: 90%">
+    <thead>
+        <tr>
+            <th style="width: 10%">Index</th>
+            <th style="width: 20%">Nick Name</th>
+            <th style="width: 10%">Join</th>
+            <th style="width: 20%">name</th>
+            <th style="width: 20%">Phone</th>
+            <th style="width: 5%">Deleted</th>
+            <th style="width: 15%">Created</th>
+        </tr>
+    </thead>
+    <tbody id="table-body">
+        <!--ajax response -->
+    </tbody>
+</table>
+
+<script>
+    function cancel_search() {
+        // window.location.href = 'index';
+        history.back();
+    }
+
+    function search_user() {
+        $.ajax({
+            url: "/api/user/list",
+            type: "POST",
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'uid': $('#_id').val(),
+                'joinFrom': $('#_join_from').val(),
+                'deleted': $('#_deleted').val(),
+                'nick': $('#_nick').val(),
+                'name': $('#_name').val(),
+                'phone': $('#_phone').val(),
+            }),
+            cache: false,
+            success: (data) => {
+                alert(JSON.stringify(data));
+                let tableBodyStr = "";
+                for (var i = 0; i < data.length; i++) {
+                    tableBodyStr += "<tr>" +
+                        `<td style='text-align: center'>${i + 1}</tda>` +
+                        `<td>${data[i].nick}</td>` +
+                        `<td>${data[i].joinFrom}</td>` +
+                        `<td>${data[i].name}</td>` +
+                        `<td>${data[i].phone}</td>` +
+                        `<td style='text-align: center'>${data[i].deleted}</td>` +
+                        `<td>${(data[i].createdAt + '').slice(5, -10)}</td>` +
+                        "</tr>";
+                }
+                $('#table-body').html(tableBodyStr);
+            },
+            error: (data) => {
+                alert("error" + JSON.stringify(data));
+            },
+        });
+    }
+    search_user();
+</script>
+</body>
+</html>

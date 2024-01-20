@@ -2,14 +2,17 @@ package com.spring.crud.service.impl;
 
 import com.spring.crud.domain.TbUser;
 import com.spring.crud.dto.TbUserAfterCreateDto;
+import com.spring.crud.dto.TbUserAfterListSelectDto;
 import com.spring.crud.dto.TbUserAfterSelectDto;
 import com.spring.crud.dto.TbUserAfterUpdateDto;
 import com.spring.crud.dto.TbUserCreateDto;
+import com.spring.crud.dto.TbUserListSelectDto;
 import com.spring.crud.dto.TbUserUpdateDto;
 import com.spring.crud.mapper.TbUserMapper;
 import com.spring.crud.repository.TbUserRepository;
 import com.spring.crud.service.TbUserService;
 import jakarta.persistence.EntityNotFoundException;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +61,10 @@ public class TbUserServiceImpl implements TbUserService {
         }
         tbUserRepository.save(targetUser);
         return targetUser.toAfterUpdateDto();
+    }
+
+    @Override
+    public List<TbUserAfterListSelectDto> list(TbUserListSelectDto params) {
+        return tbUserMapper.getList(params);
     }
 }

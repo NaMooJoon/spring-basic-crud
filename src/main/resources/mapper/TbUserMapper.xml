@@ -18,19 +18,23 @@
         WHERE tb_user.id = #{id}
     </select>
 
-<!--    <select id="getList" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardListRequestDto" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">-->
-<!--        SELECT tb_board.id-->
-<!--             , tb_board.title-->
-<!--             , tb_board.content-->
-<!--             , tb_board.deleted-->
-<!--             , tb_board.created_at AS createdAt-->
-<!--             , tb_board.modified_at AS modifiedAt-->
-<!--        FROM tb_board-->
-<!--        WHERE tb_board.id is not null-->
-<!--        <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>-->
-<!--        <if test="deleted != null and deleted != ''">AND tb_board.deleted = #{deleted} </if>-->
-<!--        ORDER BY tb_board.created_at DESC-->
-<!--    </select>-->
+    <select id="getList" parameterType="com.spring.crud.dto.TbUserListSelectDto" resultType="com.spring.crud.dto.TbUserAfterListSelectDto">
+        SELECT tb_user.nick
+            ,tb_user.join_from AS joinFrom
+            ,tb_user.name
+            ,tb_user.phone
+            ,tb_user.deleted
+            ,tb_user.created_at AS createdAt
+        FROM tb_user
+        WHERE tb_user.id is not null
+        <if test="uid != null and uid != ''">AND tb_user.uid LIKE CONCAT('%', #{uid}, '%')</if>
+        <if test="joinFrom != null and joinFrom != ''"> AND tb_user.join_from=#{joinFrom}</if>
+        <if test="nick != null and nick != ''">AND tb_user.nick LIKE CONCAT('%', #{nick}, '%')</if>
+        <if test="name != null and name != ''">AND tb_user.name LIKE CONCAT('%', #{name}, '%')</if>
+        <if test="phone != null and phone != ''">AND tb_user.phone LIKE CONCAT('%', #{phone}, '%')</if>
+        <if test="deleted != null and deleted != ''">AND tb_user.deleted = #{deleted} </if>
+        ORDER BY tb_user.created_at DESC
+    </select>
 
 <!--    <select id="getPaged" parameterType="com.spring.crud.dto.TbBoardDto$TbBoardPageListRequest" resultType="com.spring.crud.dto.TbBoardDto$TbBoardSelectResponseDto">-->
 <!--        SELECT tb_board.id-->
