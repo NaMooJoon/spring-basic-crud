@@ -12,7 +12,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TbUserAfterCreateDto {
+public class TbUserAfterUpdateDto {
 
     @Schema(description = "id", example = "length32TextNumber")
     private String id;

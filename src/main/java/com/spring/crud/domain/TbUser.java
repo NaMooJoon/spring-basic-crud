@@ -1,7 +1,7 @@
 package com.spring.crud.domain;
 
 import com.spring.crud.dto.TbUserAfterCreateDto;
-import com.spring.crud.dto.TbUserCreateDto;
+import com.spring.crud.dto.TbUserAfterUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
@@ -70,6 +70,11 @@ public class TbUser extends AuditingFields {
 
     public TbUserAfterCreateDto toAfterCreateDto() {
         return TbUserAfterCreateDto.builder()
+                .id(super.getId())
+                .build();
+    }
+    public TbUserAfterUpdateDto toAfterUpdateDto() {
+        return TbUserAfterUpdateDto.builder()
                 .id(super.getId())
                 .build();
     }

@@ -75,7 +75,6 @@ public class TbBoardServiceImpl implements TbBoardService {
 
     @Override
     public List<TbBoardSelectResponseDto> scroll(TbBoardScrollListRequestDto params) {
-        System.out.println("\n========> " + params.getSearchDate());
         return tbBoardMapper.getScroll(params);
     }
 }

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Update</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        button {
+            padding: 2px;
+            cursor: pointer;
+        }
+        .body-div {
+            width: 70%;
+        }
+        .right-pos {
+            padding-top: 10px;
+            position: relative;
+            float: right;
+        }
+        *:required {
+            background-color: palegoldenrod;
+        }
+        .req {
+            color: red;
+        }
+        label {
+        }
+        .search-div {
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Update User Information Page</h1>
+<!--For Search-->
+<div class="body-div">
+    <form>
+        <fieldset>
+            <legend>Find by ID:</legend>
+            <div class="search-div">
+                <label for="detail_id">ID<span class="req">*</span>: </label>
+                <input id="detail_id" required/>
+                <br>
+                <small>Ex) 8a80574cc27a42bdb6b9b5641ede0c52</small>
+            </div>
+            <div class="right-pos">
+                <button type="button" onclick="detail_user()">find</button>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<!--Search result-->
+<div class="body-div">
+    <form>
+        <fieldset>
+            <legend>User Information</legend>
+            <div class="search-div">
+                <label for="update_id">Profile Image</label>
+                <div id="image"></div>
+            </div>
+            <div class="search-div">
+                <label for="update_id">ID<span class="req">*</span>: </label>
+                <input id="update_id" required/>
+            </div>
+            <div class="search-div">
+                <label for="update_nick">Nick name<span class="req">*</span>: </label>
+                <input id="update_nick" required />
+            </div>
+            <div class="search-div">
+                <label for="update_name">Real name: </label>
+                <input id="update_name"/>
+            </div>
+            <div class="search-div">
+                <label for="phone">Phone number: </label>
+                <input type="tel" id="phone"/>
+            </div>
+        </fieldset>
+        <div class="right-pos">
+            <input type="submit" onclick="update_user()" />
+        </div>
+    </form>
+</div>
+<script>
+    function detail_user(){
+        $.ajax({
+            url: "/api/user/" + $("#detail_id").val(),
+            type: "GET",
+            contentType : 'application/json; charset=utf-8',
+            cache: false,
+            success: (data)=>{
+                alert("data : " + JSON.stringify(data));
+                if (data.image != null || data.image != '') {
+                    $('#image').html(`<img style="width: 250px" src=${data.image} alt="profile image">`);
+                    $('#image').append(`<div><input id="update_image"/></div>`);
+                    $('#update_image').val(data.image);
+                }
+                $('#update_id').val(data.uid);
+                $('#update_nick').val(data.nick);
+                $('#update_name').val(data.name);
+                $('#phone').val(data.phone);
+            },
+            error: (data)=>{
+                console.log("error");
+                alert(JSON.stringify(data));
+            },
+        });
+    }
+    function update_user(){
+        $.ajax({
+            url: "/api/user",
+            type: "PUT",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'id': $('#detail_id').val(),
+                'image': $('#update_image').val(),
+                'uid' : $("#update_id").val(),
+                'nick': $("#update_nick").val(),
+                'name': $("#update_name").val(),
+                'phone': $("#phone").val(),
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                alert("data : " + JSON.stringify(data));
+            },
+            error: (data)=>{
+                alert(JSON.stringify(data));
+            },
+        });
+
+    }
+
+</script>
+</body>
+</html>

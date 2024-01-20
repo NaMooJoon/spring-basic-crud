@@ -9,7 +9,7 @@ Todo
     - [x] Scroll
 - User
   - [x] Create
-  - [ ] Update
+  - [x] Update
   - [ ] Read
     - [x] One user detail page
     - [ ] User list

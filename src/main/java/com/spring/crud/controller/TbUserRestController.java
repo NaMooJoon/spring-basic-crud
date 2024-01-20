@@ -1,9 +1,10 @@
 package com.spring.crud.controller;
 
-import com.spring.crud.dto.TbBoardDto.TbBoardSelectResponseDto;
 import com.spring.crud.dto.TbUserAfterCreateDto;
 import com.spring.crud.dto.TbUserAfterSelectDto;
+import com.spring.crud.dto.TbUserAfterUpdateDto;
 import com.spring.crud.dto.TbUserCreateDto;
+import com.spring.crud.dto.TbUserUpdateDto;
 import com.spring.crud.service.TbUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,5 +52,11 @@ public class TbUserRestController {
     public ResponseEntity<TbUserAfterSelectDto> get(@PathVariable("id") String id) {
         TbUserAfterSelectDto tbUserAfterSelectDto = tbUserService.get(id);
         return ResponseEntity.status(HttpStatus.OK).body(tbUserAfterSelectDto);
+    }
+
+    @PutMapping("")
+    public ResponseEntity<TbUserAfterUpdateDto> update(@Valid @RequestBody TbUserUpdateDto params) {
+        TbUserAfterUpdateDto tbUserAfterUpdateDto = tbUserService.update(params);
+        return ResponseEntity.status(HttpStatus.OK).body(tbUserAfterUpdateDto);
     }
 }
