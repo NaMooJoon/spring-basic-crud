@@ -1,9 +1,20 @@
 # Spring Basic CRUD Board Application
 Todo
-- [x] Board 등록 및 수정
-- [x] Board 검색 기능
-- [x] User 등록 및 수정
-- [x] User 검색 기능
+- Board
+  - [x] Create
+  - [x] Update
+  - [x] Read
+    - [x] Key word
+    - [x] Page
+    - [x] Scroll
+- User
+  - [x] Create
+  - [ ] Update
+  - [ ] Read
+    - [x] One user detail page
+    - [ ] User list
+    - [ ] Page
+    - [ ] Scroll
 
 Tech
 - JPA로 DB table create 및 insert
