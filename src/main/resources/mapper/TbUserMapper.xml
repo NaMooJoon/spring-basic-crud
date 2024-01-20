@@ -19,11 +19,13 @@
     </select>
 
     <select id="getList" parameterType="com.spring.crud.dto.TbUserListSelectDto" resultType="com.spring.crud.dto.TbUserAfterListSelectDto">
-        SELECT tb_user.nick
+        SELECT tb_user.id
+            ,tb_user.nick
             ,tb_user.join_from AS joinFrom
             ,tb_user.name
             ,tb_user.phone
             ,tb_user.deleted
+            ,tb_user.image
             ,tb_user.created_at AS createdAt
         FROM tb_user
         WHERE tb_user.id is not null

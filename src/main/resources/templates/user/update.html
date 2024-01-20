@@ -77,10 +77,15 @@
         </fieldset>
         <div class="right-pos">
             <input type="submit" onclick="update_user()" />
+            <button type="button" onclick="cancel_search()">Cancel</button>
         </div>
     </form>
 </div>
 <script>
+    function cancel_search() {
+        history.back();
+    }
+
     function detail_user(){
         $.ajax({
             url: "/api/user/" + $("#detail_id").val(),

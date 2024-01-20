@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class TbUserAfterListSelectDto {
 
+    @Schema(description = "id", example = "length32TextNumber")
+    private String id;
+
     @Schema(description = "nick", example = "닉네임")
     @Size(max = 50)
     private String nick;
@@ -29,6 +32,9 @@ public class TbUserAfterListSelectDto {
     @Schema(description = "phone", example = "전화번호")
     @Size(max = 50)
     private String phone;
+
+    @Schema(description = "image", example = "image url")
+    private String image;
 
     @Schema(description = "deleted", example = "N or Y")
     private String deleted;

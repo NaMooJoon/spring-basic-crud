@@ -34,10 +34,30 @@
         .search-div {
             padding-bottom: 10px;
         }
+        footer {
+            display: flex;
+            padding: 5px;
+            position : absolute;
+            bottom : 0;
+            left: 45%;
+            text-align: center;
+        }
+        menu {
+            float: none;
+            display: flex;
+            list-style: none;
+            padding: 0;
+        }
     </style>
 </head>
 <body>
 <h1>User List Viewer Page</h1>
+<div class="search-div">
+    <menu>
+        <li><a href="/user/create"><button>Create Page</button></a></li>
+        <li><a href="/user/update"><button>Update Page</button></a><li>
+    </menu>
+</div>
 <div class="body-div">
     <form>
         <fieldset>
@@ -82,9 +102,10 @@
     <thead>
         <tr>
             <th style="width: 10%">Index</th>
-            <th style="width: 20%">Nick Name</th>
+            <th style="width: 20%">Id</th>
+            <th style="width: 10%">Nick Name</th>
             <th style="width: 10%">Join</th>
-            <th style="width: 20%">name</th>
+            <th style="width: 10%">name</th>
             <th style="width: 20%">Phone</th>
             <th style="width: 5%">Deleted</th>
             <th style="width: 15%">Created</th>
@@ -94,7 +115,6 @@
         <!--ajax response -->
     </tbody>
 </table>
-
 <script>
     function cancel_search() {
         // window.location.href = 'index';
@@ -116,11 +136,11 @@
             }),
             cache: false,
             success: (data) => {
-                alert(JSON.stringify(data));
                 let tableBodyStr = "";
                 for (var i = 0; i < data.length; i++) {
                     tableBodyStr += "<tr>" +
                         `<td style='text-align: center'>${i + 1}</tda>` +
+                        `<td id='_id'><img style="width: 100px" src=${data[i].image} alt="No imagez">${data[i].id}</td>` +
                         `<td>${data[i].nick}</td>` +
                         `<td>${data[i].joinFrom}</td>` +
                         `<td>${data[i].name}</td>` +
