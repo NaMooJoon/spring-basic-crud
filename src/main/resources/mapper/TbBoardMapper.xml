@@ -72,6 +72,7 @@
             <if test="searchWay == 'backwards'"> AND tb_board.created_at > STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tb_board.created_at ASC</if>
             <if test="searchWay == 'forwards'">AND STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') > tb_board.created_at ORDER BY tb_board.created_at DESC</if>
         </if>
+        <if test="searchDate == null or searchDate == ''">ORDER BY tb_board.created_at ASC</if>
         LIMIT 0, #{requestBoardSize}
     </select>
 

@@ -70,7 +70,7 @@
             <input id="search_end_date" type="date" />
         </div>
         <div class="right-pos">
-            <button id="btn-search" onclick="search_board();">Search</button>
+            <button id="btn-search" onclick="new_search_board();">Search</button>
             <button id="btn-cancel" onclick="cancel_search();">Cancel</button>
         </div>
     </fieldset>
@@ -88,9 +88,10 @@
             <th style="width: 3%">Index</th>
             <th style="width: 20%">Title</th>
             <th style="width: 55%">Content</th>
-            <th style="width: 15%">Created At</th>
+            <th style="width: 13%">Created At</th>
             <th style="width: 5%">Deleted</th>
-            <th style="width: 2%">-</th>
+            <th style="width: 2%">View</th>
+            <th style="width: 2%">Edit</th>
         </tr>
     </thead>
     <tbody id="table-body">
@@ -105,6 +106,15 @@
 <script>
     function cancel_search() {
         history.back();
+    }
+
+    function new_search_board() {
+        $('#backwards_date').text('-');
+        $('#forwards_date').text('-');
+        $('#btn-more').show();
+        $('#btn-end').hide();
+        $('#table-body').html('');
+        search_board();
     }
 
     function search_board() {
@@ -127,11 +137,10 @@
             }),
             cache: false,
             success: (data) => {
+                alert('data: ' + JSON.stringify(data));
                 if (data.length == 0) {
                     $('#btn-more').hide();
                     $('#btn-end').show();
-                } else {
-                    $('#table-body').html('');
                 }
                 for (var i = 0; i < data.length; i++) {
                     let tableBodyStr = "<tr>" +
@@ -140,6 +149,7 @@
                         `<td>${data[i].content}</td>` +
                         `<td>${(data[i].createdAt + '').slice(5, -7)}</td>` +
                         `<td style='text-align: center'>${data[i].deleted}</td>` +
+                        `<td><a href='/board/detail/${data[i].id}'>view</a> </td>` +
                         `<td><a href='/board/update/${data[i].id}'>edit</a> </td>` +
                         "</tr>";
                     $('#table-body').append(tableBodyStr);
@@ -156,7 +166,7 @@
             },
         });
     }
-    search_board();
+    new_search_board();
 </script>
 </body>
 </html>
