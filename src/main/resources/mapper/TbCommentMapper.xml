@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.crud.mapper.TbCommentMapper">
+
+    <select id="detail" parameterType="hashMap" resultType="com.spring.crud.dto.temp.TbCmtAfterSelectDto">
+        SELECT tb_comment.id
+            , tb_comment.tb_board_id AS tbBoardId
+            , tb_comment.content
+            , tb_comment.deleted
+            , tb_comment.created_at AS createdAt
+            , tb_comment.modified_at AS modifiedAt
+        FROM tb_comment
+        WHERE tb_comment.id = ${id}
+    </select>
+
+    <select id="getList" parameterType="com.spring.crud.dto.temp.TbCmtListDto" resultType="com.spring.crud.dto.temp.TbCmtAfterSelectDto">
+        SELECT tb_comment.id
+             , tb_comment.tb_board_id AS tbBoardId
+             , tb_comment.content
+             , tb_comment.deleted
+             , tb_comment.created_at AS createdAt
+             , tb_comment.modified_at AS modifiedAt
+        FROM tb_comment
+        WHERE tb_comment.id is not null
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_comment.tb_board_id = #{tbBoardId} </if>
+        <if test="deleted != null and deleted != ''">AND tb_comment.deleted = #{deleted} </if>
+        ORDER BY createdAt ASC
+    </select>
+
+</mapper>

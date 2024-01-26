@@ -31,6 +31,11 @@ public class TbBoardPageController {
         return "board/page";
     }
 
+    @GetMapping("/detail/{id}")
+    public String detail() {
+        return "board/detail";
+    }
+
     @GetMapping("/scroll")
     public String scroll() {
         return "board/scroll";

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        button {
+            padding: 2px;
+            cursor: pointer;
+        }
+        .right-pos {
+            position: relative;
+            float: right;
+        }
+        .body-div {
+            width: 90%;
+            height: 500px;
+        }
+        label {
+        }
+        table {
+            width: 100%;
+            border-top: 1px solid #444444;
+            border-collapse: collapse;
+        }
+        th, td {
+            border-bottom: 1px solid #444444;
+            border-left: 1px solid #444444;
+            padding: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Board Detail Page</h1>
+    <div class="body-div">
+        <div>
+            <label for="detail_title">Title:</label>
+            <input readonly id="detail_title" name="title" value=""/>
+        </div>
+        <div>
+            <label for="detail_content">Content:</label>
+            <textarea readonly id="detail_content" placeholder="Input some content." style="width: 100%; height: 300px"></textarea>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Post's status:</legend>
+                <label for="detail_deleted">Delete</label>
+                <input readonly type="checkbox" id="detail_deleted" onclick="return false;"/>
+            </fieldset>
+        </div>
+        <hr>
+        <div>
+            <h2>Commments</h2>
+            <table>
+                <thead>
+                <tr>
+                    <th style="width: 5%">Index</th>
+                    <th style="width: 80%">Contents</th>
+                    <th style="width: 10%">At</th>
+                    <th style="width: 5%">-</th>
+                </tr>
+                </thead>
+                <tbody id="comment_body">
+                <!--ajax response -->
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <label for="comment_id">You:</label>
+            <textarea id="comment_id" placeholder="Input your comments here..." style="width: 100%; height: 50px"></textarea>
+            <div class="right-pos">
+                <button id="btn-upload" onclick="upload_cmt();">Upload</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        callBoard();
+        callComments();
+
+
+    <!-- functions -->
+        function getId() {
+            let temp_url_with_idx = window.location.href;
+            // http://localhost:8080/tbboard/detail/de0ea4ddc1cf46c1a971d770f8a94b44
+            let split_slash_temp_idx = temp_url_with_idx.split('/');
+            let temp_idx = split_slash_temp_idx[split_slash_temp_idx.length - 1];
+            let split_question_temp_idx = temp_idx.split('?');
+            if(split_question_temp_idx.length > 0){
+                temp_idx = split_question_temp_idx[0];
+                // de0ea4ddc1cf46c1a971d770f8a94b44
+            }
+            return temp_idx;
+        }
+
+        function callBoard() {
+            let board_id = getId();
+            $.ajax({
+                url: `/api/board/` + board_id,
+                type: "GET",
+                contentType: 'application/json; charset=utf-8',
+                cache: false,
+                success: (data, status, xhr) => {
+                    document.getElementById("detail_title").value = data.title;
+                    document.getElementById("detail_content").value = data.content;
+                    document.getElementById("detail_deleted").checked = (data.deleted == "N")? false : true;
+                },
+                error: (data) => {
+                    alert(data);
+                },
+            })
+        }
+
+        function cancel_update() {
+            // window.location.href = 'index';
+            history.back();
+        }
+
+        function upload_cmt() {
+            let tb_board_id = getId();
+            let cmt_content = $('#comment_id').val();
+            $.ajax({
+                url: "/api/cmt",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'tbBoardId': tb_board_id,
+                    'content': cmt_content
+                }),
+                cache: false,
+                success: () => {
+                    callComments();
+                },
+                error: (data) => {
+                    alert(data);
+                },
+            });
+        }
+
+        function update_cmt(table_idx, cmt_id) {
+            // alert(table_idx + ' ' + cmt_id);
+            let tb_board_id = getId();
+            let cmt_content = $('#cmt-content-' + table_idx).val();
+            $.ajax({
+                url: "/api/cmt",
+                type: "PUT",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'id': cmt_id,
+                    'tbBoardId': tb_board_id,
+                    'content': $('#cmt-content-' + table_idx).val()
+                }),
+                cache: false,
+                success: (data) => {
+                    callComments();
+                },
+                error: (data) => {
+                    alert(data);
+                },
+            });
+        }
+
+        function callComments() {
+            let tb_board_id = getId();
+            $.ajax({
+                url: "/api/cmt/list",
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'tbBoardId': tb_board_id,
+                    'deleted': "N"
+                }),
+                cache: false,
+                success: (data) => {
+                    let tableBodyStr = "";
+                    for (let i = 0; i < data.length; i++) {
+                        let cmt_id = "" + data[i].id;
+                        tableBodyStr += "<tr>" +
+                            `<td style='text-align: center'>${i + 1}</tda>` +
+                            `<td>
+                                <div id='cmt-${i + 1}'>${data[i].content}</div>
+                                <div style='display: none' id='cmt-input-${i + 1}'><input id='cmt-content-${i + 1}' value='${data[i].content}' /></div>
+                            </td>` +
+                            `<td>${(data[i].createdAt + '').slice(5, -10)}</td>` +
+                            `<td>
+                                <button id="btn-update-${i + 1}" style="display: none">Update</button>
+                                <button id="btn-modify-${i + 1}" onclick="modify_cmt(${i + 1});">Modify</button>
+                            </td>` +
+                            "</tr>";
+                    }
+                    $('#comment_body').html(tableBodyStr);
+                    for (let i = 0; i < data.length; i++) {
+                        document.getElementById(`btn-update-${i + 1}`).addEventListener("click", function() {
+                            update_cmt(i + 1, data[i].id);
+                        }, false);
+                    }
+                },
+                error: (data) => {
+                    alert("error" + JSON.stringify(data));
+                },
+            });
+        }
+
+        function modify_cmt(idx) {
+            $('#btn-modify-' + idx).hide();
+            $('#btn-update-' + idx).show();
+            $('#cmt-' + idx).hide();
+            $('#cmt-input-' + idx).show();
+        }
+
+    </script>
+</body>
+</html>
