@@ -1,12 +1,12 @@
 package com.spring.crud.controller;
 
-import com.spring.crud.dto.TbUserAfterCreateDto;
-import com.spring.crud.dto.TbUserAfterListSelectDto;
-import com.spring.crud.dto.TbUserAfterSelectDto;
-import com.spring.crud.dto.TbUserAfterUpdateDto;
-import com.spring.crud.dto.TbUserCreateDto;
-import com.spring.crud.dto.TbUserListSelectDto;
-import com.spring.crud.dto.TbUserUpdateDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterCreateDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterListSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterUpdateDto;
+import com.spring.crud.dto.TbUserDto.TbUserCreateDto;
+import com.spring.crud.dto.TbUserDto.TbUserListSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserUpdateDto;
 import com.spring.crud.service.TbUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

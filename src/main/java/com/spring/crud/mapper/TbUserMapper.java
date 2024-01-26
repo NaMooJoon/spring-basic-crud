@@ -1,8 +1,8 @@
 package com.spring.crud.mapper;
 
-import com.spring.crud.dto.TbUserAfterListSelectDto;
-import com.spring.crud.dto.TbUserAfterSelectDto;
-import com.spring.crud.dto.TbUserListSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterListSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserListSelectDto;
 import java.util.List;
 
 public interface TbUserMapper {

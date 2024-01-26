@@ -1,7 +1,7 @@
 package com.spring.crud.domain;
 
-import com.spring.crud.dto.TbUserAfterCreateDto;
-import com.spring.crud.dto.TbUserAfterUpdateDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterCreateDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;

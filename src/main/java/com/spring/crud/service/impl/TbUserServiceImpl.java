@@ -1,13 +1,13 @@
 package com.spring.crud.service.impl;
 
 import com.spring.crud.domain.TbUser;
-import com.spring.crud.dto.TbUserAfterCreateDto;
-import com.spring.crud.dto.TbUserAfterListSelectDto;
-import com.spring.crud.dto.TbUserAfterSelectDto;
-import com.spring.crud.dto.TbUserAfterUpdateDto;
-import com.spring.crud.dto.TbUserCreateDto;
-import com.spring.crud.dto.TbUserListSelectDto;
-import com.spring.crud.dto.TbUserUpdateDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterCreateDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterListSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserAfterUpdateDto;
+import com.spring.crud.dto.TbUserDto.TbUserCreateDto;
+import com.spring.crud.dto.TbUserDto.TbUserListSelectDto;
+import com.spring.crud.dto.TbUserDto.TbUserUpdateDto;
 import com.spring.crud.mapper.TbUserMapper;
 import com.spring.crud.repository.TbUserRepository;
 import com.spring.crud.service.TbUserService;
