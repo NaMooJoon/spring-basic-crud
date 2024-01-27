@@ -12,9 +12,14 @@ Todo
   - [x] Update
   - [ ] Read
     - [x] One user detail page
-    - [ ] User list
+    - [x] User list
     - [ ] Page
     - [ ] Scroll
+- Comment
+  - [x] Create
+  - [x] Update
+  - [x] Read
+  - [x] Delete
 
 Tech
 - JPA로 DB table create 및 insert
