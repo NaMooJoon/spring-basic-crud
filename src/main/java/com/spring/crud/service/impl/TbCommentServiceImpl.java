@@ -5,6 +5,7 @@ import com.spring.crud.dto.temp.TbCmtAfterCreateDto;
 import com.spring.crud.dto.temp.TbCmtAfterSelectDto;
 import com.spring.crud.dto.temp.TbCmtAfterUpdateDto;
 import com.spring.crud.dto.temp.TbCmtCreateDto;
+import com.spring.crud.dto.temp.TbCmtDeleteDto;
 import com.spring.crud.dto.temp.TbCmtListDto;
 import com.spring.crud.dto.temp.TbCmtUpdateDto;
 import com.spring.crud.exception.NoMatchedDataException;
@@ -36,7 +37,6 @@ public class TbCommentServiceImpl implements TbCommentService {
     public TbCmtAfterUpdateDto update(TbCmtUpdateDto params) {
         TbComment comment = tbCommentRepository.findById(params.getId())
                 .orElseThrow(() -> new NoMatchedDataException("TbCommentServiceImpl_ update"));
-        System.out.println("======> UPDATE");
         if (params.getTbBoardId() != null) {
             comment.setTbBoardId(params.getTbBoardId());
         }
@@ -46,6 +46,17 @@ public class TbCommentServiceImpl implements TbCommentService {
         if (params.getDeleted() != null) {
             comment.setDeleted(params.getDeleted());
         }
+        tbCommentRepository.save(comment);
+        return comment.toAfterUpdateDto();
+    }
+
+    @Override
+    public TbCmtAfterUpdateDto delete(TbCmtDeleteDto params) {
+
+        TbComment comment = tbCommentRepository.findById(params.getId())
+                .orElseThrow(() -> new NoMatchedDataException("TbCommentServiceImpl_ delete"));
+        comment.setDeleted("Y");
+
         tbCommentRepository.save(comment);
         return comment.toAfterUpdateDto();
     }

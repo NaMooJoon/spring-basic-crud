@@ -57,8 +57,9 @@
                 <thead>
                 <tr>
                     <th style="width: 5%">Index</th>
-                    <th style="width: 80%">Contents</th>
+                    <th style="width: 75%">Contents</th>
                     <th style="width: 10%">At</th>
+                    <th style="width: 5%">-</th>
                     <th style="width: 5%">-</th>
                 </tr>
                 </thead>
@@ -162,6 +163,24 @@
             });
         }
 
+        function delete_cmt(cmt_id) {
+            $.ajax({
+                url: "/api/cmt",
+                type: "DELETE",
+                contentType: 'application/json; charset=utf-8',
+                data: JSON.stringify({
+                    'id': cmt_id,
+                }),
+                cache: false,
+                success: (data) => {
+                    callComments();
+                },
+                error: (data) => {
+                    alert(data);
+                },
+            });
+        }
+
         function callComments() {
             let tb_board_id = getId();
             $.ajax({
@@ -188,12 +207,18 @@
                                 <button id="btn-update-${i + 1}" style="display: none">Update</button>
                                 <button id="btn-modify-${i + 1}" onclick="modify_cmt(${i + 1});">Modify</button>
                             </td>` +
+                            `<td>
+                                <button id="btn-delete-${i + 1}">Delete</button>
+                            </td>`
                             "</tr>";
                     }
                     $('#comment_body').html(tableBodyStr);
                     for (let i = 0; i < data.length; i++) {
                         document.getElementById(`btn-update-${i + 1}`).addEventListener("click", function() {
                             update_cmt(i + 1, data[i].id);
+                        }, false);
+                        document.getElementById(`btn-delete-${i + 1}`).addEventListener("click", function() {
+                            delete_cmt(data[i].id);
                         }, false);
                     }
                 },
