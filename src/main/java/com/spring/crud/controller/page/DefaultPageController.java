@@ -2,19 +2,26 @@ package com.spring.crud.controller.page;
 
 import com.spring.crud.util.FileUpload;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.util.Map;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @RequestMapping("")
@@ -61,5 +68,24 @@ public class DefaultPageController {
             }
         }
         return return_byte;
+    }
+
+    @RequestMapping(value = "/download/{file_name:.+}", method = RequestMethod.GET)
+    public void download(@PathVariable("file_name") String filename, @RequestParam Map<String, Object> map, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        logger.info("Download call: " + filename);
+
+        String root_path = FileUpload.path(request);
+        logger.info("root_path: " + root_path);
+        File file = new File(root_path + filename);
+        String mimeType = URLConnection.guessContentTypeFromName(filename); // 파일의 mime타입 확인
+        if (mimeType == null) {
+            mimeType = "application/octet-stream";
+        }
+        response.setContentType(mimeType); // Response에 mimType 설정
+        response.setContentLength((int) file.length());
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(file.getName(), "utf-8") +"\"");
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file)); // InputStream에 객체
+        FileCopyUtils.copy(inputStream, response.getOutputStream());
+
     }
 }

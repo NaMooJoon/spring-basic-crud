@@ -22,7 +22,7 @@ Todo
   - [x] Read
   - [x] Delete
   - [x] File Upload
-  - [ ] File Download
+  - [x] File Download
 
 
 ### TbBoard (테이블 / Board)
