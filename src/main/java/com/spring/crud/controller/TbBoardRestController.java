@@ -43,7 +43,7 @@ public class TbBoardRestController {
                     + "@exception 중복 <br />")
     @PostMapping("")
     public ResponseEntity<TbBoardCreateResponseDto> save(@RequestBody TbBoardCreateRequestDto params, HttpServletRequest request) {
-        logger.info(">>>> " + request.getAttribute("test_req"));
+//        logger.info(">>>> " + request.getAttribute("test_req"));
         return ResponseEntity.status(HttpStatus.CREATED).body(tbBoardService.create(params));
     }
 

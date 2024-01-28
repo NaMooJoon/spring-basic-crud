@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.crud.mapper.TbPictureMapper">
+
+    <select id="detail" parameterType="hashMap" resultType="com.spring.crud.dto.TbPictureDto$TbPictureAfterSelectDto">
+        SELECT tb_picture.id
+            , tb_picture.tb_board_id AS tbBoardId
+            , tb_picture.content
+            , tb_picture.deleted
+            , tb_picture.created_at AS createdAt
+            , tb_picture.modified_at AS modifiedAt
+        FROM tb_picture
+        WHERE tb_picture.id = ${id}
+    </select>
+
+    <select id="getList" parameterType="com.spring.crud.dto.TbPictureDto$TbPictureListDto" resultType="com.spring.crud.dto.TbPictureDto$TbPictureAfterSelectDto">
+        SELECT tb_picture.id
+             , tb_picture.tb_board_id AS tbBoardId
+             , tb_picture.content
+             , tb_picture.deleted
+             , tb_picture.created_at AS createdAt
+             , tb_picture.modified_at AS modifiedAt
+        FROM tb_picture
+        WHERE tb_picture.id is not null
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_picture.tb_board_id = #{tbBoardId} </if>
+        <if test="content != null and content != ''">AND tb_picture.content LIKE CONCAT('%', #{content}, '%') </if>
+        <if test="deleted != null and deleted != ''">AND tb_picture.deleted = #{deleted} </if>
+        ORDER BY createdAt ASC
+    </select>
+
+    <select id="pagedListCount" parameterType="com.spring.crud.dto.TbPictureDto$TbPicturePagedListDto" resultType="Integer">
+        SELECT COUNT(tb_picture.id) AS listCount
+        FROM tb_picture
+        WHERE tb_picture.id is not null
+        <if test="beginDate != null and beginDate != ''">AND tb_picture.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_picture.created_at</if>
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_picture.tb_board_id = #{tbBoardId} </if>
+        <if test="content != null and content != ''">AND tb_picture.content LIKE CONCAT('%', #{content}, '%') </if>
+        <if test="deleted != null and deleted != ''">AND tb_picture.deleted = #{deleted} </if>
+    </select>
+
+    <select id="page" parameterType="com.spring.crud.dto.TbPictureDto$TbPicturePagedListDto" resultType="com.spring.crud.dto.TbPictureDto$TbPictureAfterSelectDto">
+        SELECT tb_picture.id
+            , tb_picture.tb_board_id AS tbBoardId
+            , tb_picture.content
+            , tb_picture.deleted
+            , tb_picture.created_at AS createdAt
+            , tb_picture.modified_at AS modifiedAt
+        FROM tb_picture
+        WHERE tb_picture.id is not null
+        <if test="beginDate != null and beginDate != ''">AND tb_picture.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_picture.created_at</if>
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_picture.tb_board_id = #{tbBoardId} </if>
+        <if test="content != null and content != ''">AND tb_picture.content LIKE CONCAT('%', #{content}, '%') </if>
+        <if test="deleted != null and deleted != ''">AND tb_picture.deleted = #{deleted} </if>
+        <if test="orderBy == 'createAt'">ORDER BY createdAt </if>
+        <if test="orderWay == 'asc'">ASC</if>
+        <if test="orderWay == 'desc'">DESC</if>
+    </select>
+
+    <select id="getScroll" parameterType="com.spring.crud.dto.TbPictureDto$TbPictureScrollListDto" resultType="com.spring.crud.dto.TbPictureDto$TbPictureAfterSelectDto">
+        SELECT tb_picture.id
+             , tb_picture.tb_board_id AS tbBoardId
+             , tb_picture.content
+             , tb_picture.deleted
+             , tb_picture.created_at AS createdAt
+             , tb_picture.modified_at AS modifiedAt
+        FROM tb_picture
+        WHERE tb_picture.id is not null
+        <if test="beginDate != null and beginDate != ''">AND tb_picture.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_picture.created_at</if>
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_picture.tb_board_id = #{tbBoardId} </if>
+        <if test="content != null and content != ''">AND tb_picture.content LIKE CONCAT('%', #{content}, '%') </if>
+        <if test="searchDate != null and searchDate != ''">
+            <if test="searchWay == 'backwards'"> AND tb_picture.created_at > STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tb_picture.created_at ASC</if>
+            <if test="searchWay == 'forwards'">AND STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') > tb_picture.created_at ORDER BY tb_picture.created_at DESC</if>
+        </if>
+        <if test="searchDate == null or searchDate == ''">ORDER BY tb_picture.created_at ASC</if>
+    </select>
+
+
+</mapper>

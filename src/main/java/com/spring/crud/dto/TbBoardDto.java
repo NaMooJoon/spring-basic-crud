@@ -1,12 +1,14 @@
 package com.spring.crud.dto;
 
 import com.spring.crud.domain.TbBoard;
+import com.spring.crud.dto.TbPictureDto.TbPictureAfterSelectDto;
 import com.spring.crud.dto.common.CommonPagedListRequestDto;
 import com.spring.crud.dto.common.CommonScrollListRequestDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +28,9 @@ public class TbBoardDto {
         @Schema(description = "content", example = "Content is ...")
         @Size(max = 10_000)
         private String content;
+
+        @Schema(description = "pictures", example = "pictures URL")
+        private String[] pictures;
 
         public TbBoard toEntity() {
             return TbBoard.of(title, content);
@@ -54,6 +59,7 @@ public class TbBoardDto {
 
     @Builder
     @Getter
+    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class TbBoardSelectResponseDto {
@@ -66,6 +72,9 @@ public class TbBoardDto {
 
         @Schema(description = "content", example = "content")
         private String content;
+
+        @Schema(description = "pictures", example = "pictures")
+        private List<TbPictureAfterSelectDto> pictures;
 
         @Schema(description = "deleted", example = "N")
         private String deleted;

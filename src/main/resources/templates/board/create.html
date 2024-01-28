@@ -17,6 +17,9 @@
             width: 90%;
             height: 500px;
         }
+        .hide {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -30,6 +33,16 @@
         <label for="create_content">Content:</label>
         <textarea id="create_content" placeholder="Input some content." style="width: 100%; height: 300px"></textarea>
     </div>
+    <div>
+        <fieldset>
+            <legend>New images</legend>
+            <div>
+                <input class="hide" type="file" id="create_picture" onchange="readURLFile(this)" accept="image/*" />
+                <button class="btn" onclick="$('#create_picture').click(); return false;">search </button>
+            </div>
+            <div class="row" , id="div_array_picture"></div>
+        </fieldset>
+    </div>
     <div class="right-pos">
         <button id="btn-upload" onclick="upload_board();">Upload</button>
         <button id="btn-cancel" onclick="cancel_create();">Cancel</button>
@@ -42,23 +55,97 @@
     }
 
     function upload_board() {
+        let pictures = [];
+        let input_pictures = $('.input_tbpic');
+        for (let i = 0; i < input_pictures.length; i++) {
+            pictures.push($(input_pictures[i]).val());
+        }
         $.ajax({
             url: "/api/board",
             type: "POST",
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 'title': $('#create_title').val(),
-                'content': $('#create_content').val()
+                'content': $('#create_content').val(),
+                'pictures': pictures
             }),
             cache: false,
             success: (data, status, xhr) => {
                 alert("data : " + JSON.stringify(data));
             },
             error: (data) => {
-                alert(data);
+                alert(JSON.stringify(data));
             },
         });
     }
+
+    let limit_each_file_size = 10;
+
+    function readURLFile(input) {
+        let temp_id = $(input).attr('id') + "";
+        if (input.files && input.files[0]) {
+            let reader = new FileReader();
+            reader.readAsDataURL(input.files[0]);
+            reader.onload = function (e) {
+                let temp_each_file_size = input.files[0].size / (1024 * 1024);
+                if (temp_each_file_size > limit_each_file_size) {
+                    alert('파일 1개 당 ' + limit_each_file_size + 'MB 용량 제한 초과 입니다!')
+                    $(input).val('');
+                    return false;
+                }
+                if (!input.files[0].type.match('image.*')) {
+                    alert('이미지 파일이 아닙니다!');
+                    $('#' + temp_id).val(null);
+                    $('#img_' + temp_id).attr('src', '/resources/image/no-pic.jpg');
+                } else {
+                    listener_upload_file(input.files[0]);
+                }
+            };
+        }
+    }
+
+    function listener_upload_file(obj_file) {
+        let fileData = new FormData();
+        fileData.append('file', obj_file);
+
+        $.ajax({
+            url: "/api/default/uploadFile",
+            type: "POST",
+            data: fileData,
+            cache : false,
+            contentType : false,
+            processData : false,
+            success: (data, status, xhr) => {
+                alert(JSON.stringify(data));
+                switch (xhr.status) {
+                    case 201:
+                        $('#div_array_picture').append(
+                            '<div class="">' +
+                            '<img class="img-fluid" style="height:100px;" src="' + data + '"/>' +
+                            '<input class="input_tbpic hide" value="'+data+'"/>' +
+                            '<button onClick="$(this).parent().remove();">delete</button>' +
+                            '</div>'
+                        );
+                        break;
+                    default:
+                        console.log('No matching status code')
+                }
+            },
+            error: (data) => {
+                switch(data.status){
+                    case 500:
+                        alert("권한 외의 요청입니다.");
+                        location.href="/index";
+                        break;
+                    default:
+                        alert("네트워크 에러가 발생하였습니다. 다시 요청해주시기 바랍니다.");
+                        console.log("no matching status code");
+                        break;
+                }
+            }
+        });
+    }
+
 </script>
 </body>
 </html>

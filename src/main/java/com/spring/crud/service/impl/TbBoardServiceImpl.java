@@ -9,10 +9,14 @@ import com.spring.crud.dto.TbBoardDto.TbBoardUpdateRequestDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardUpdateResponseDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardPagedRequestDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardScrollListRequestDto;
+import com.spring.crud.dto.TbPictureDto;
+import com.spring.crud.dto.TbPictureDto.TbPictureCreateDto;
+import com.spring.crud.dto.TbPictureDto.TbPictureListDto;
 import com.spring.crud.dto.common.CommonPagedListResponseDto;
 import com.spring.crud.mapper.TbBoardMapper;
 import com.spring.crud.repository.TbBoardRepository;
 import com.spring.crud.service.TbBoardService;
+import com.spring.crud.service.TbPictureService;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,11 +25,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class TbBoardServiceImpl implements TbBoardService {
 
+    private final TbPictureService tbPictureService;
     private final TbBoardRepository tbBoardRepository;
     private final TbBoardMapper tbBoardMapper;
 
     @Autowired
-    public TbBoardServiceImpl(TbBoardRepository tbBoardRepository, TbBoardMapper tbBoardMapper) {
+    public TbBoardServiceImpl(TbPictureService tbPictureService, TbBoardRepository tbBoardRepository,
+                              TbBoardMapper tbBoardMapper) {
+        this.tbPictureService = tbPictureService;
         this.tbBoardRepository = tbBoardRepository;
         this.tbBoardMapper = tbBoardMapper;
     }
@@ -33,6 +40,9 @@ public class TbBoardServiceImpl implements TbBoardService {
     @Override
     public TbBoardCreateResponseDto create(TbBoardCreateRequestDto params) {
         TbBoard newBoard = tbBoardRepository.save(params.toEntity());
+        for (String picture : params.getPictures()) {
+            tbPictureService.create(new TbPictureCreateDto(newBoard.getId(), picture));
+        }
         return newBoard.toCreateResponseDto();
     }
 
@@ -57,7 +67,12 @@ public class TbBoardServiceImpl implements TbBoardService {
 
     @Override
     public TbBoardSelectResponseDto get(String id) {
-        return tbBoardMapper.get(id);
+        TbPictureListDto pic_param = new TbPictureListDto();
+        pic_param.setTbBoardId(id);
+
+        TbBoardSelectResponseDto result = tbBoardMapper.get(id);
+        result.setPictures(tbPictureService.list(pic_param));
+        return result;
     }
 
     @Override

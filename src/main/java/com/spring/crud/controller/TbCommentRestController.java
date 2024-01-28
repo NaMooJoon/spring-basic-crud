@@ -58,7 +58,6 @@ public class TbCommentRestController {
                     + "@exception 중복 <br />")
     @DeleteMapping("")
     public ResponseEntity<TbCmtAfterUpdateDto> delete(@RequestBody TbCmtDeleteDto params) {
-        System.out.println("========>");
         return ResponseEntity.status(HttpStatus.OK).body(tbCommentService.delete(params));
     }
 

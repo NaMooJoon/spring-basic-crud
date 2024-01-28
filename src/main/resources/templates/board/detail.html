@@ -29,6 +29,9 @@
             border-left: 1px solid #444444;
             padding: 10px;
         }
+        img {
+            padding-right: 3px;
+        }
 
     </style>
 </head>
@@ -42,6 +45,12 @@
         <div>
             <label for="detail_content">Content:</label>
             <textarea readonly id="detail_content" placeholder="Input some content." style="width: 100%; height: 300px"></textarea>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Images</legend>
+                <div class="row" , id="div_array_picture"></div>
+            </fieldset>
         </div>
         <div>
             <fieldset>
@@ -107,6 +116,12 @@
                     document.getElementById("detail_title").value = data.title;
                     document.getElementById("detail_content").value = data.content;
                     document.getElementById("detail_deleted").checked = (data.deleted == "N")? false : true;
+                    let pictures = data.pictures;
+                    for (picture of pictures) {
+                        $('#div_array_picture').append(
+                            "<img height='100px' src='"+picture.content+"' />"
+                        )
+                    }
                 },
                 error: (data) => {
                     alert(data);
