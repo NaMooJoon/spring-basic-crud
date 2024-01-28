@@ -1,13 +1,13 @@
 package com.spring.crud.service.impl;
 
 import com.spring.crud.domain.TbComment;
-import com.spring.crud.dto.temp.TbCmtAfterCreateDto;
-import com.spring.crud.dto.temp.TbCmtAfterSelectDto;
-import com.spring.crud.dto.temp.TbCmtAfterUpdateDto;
-import com.spring.crud.dto.temp.TbCmtCreateDto;
-import com.spring.crud.dto.temp.TbCmtDeleteDto;
-import com.spring.crud.dto.temp.TbCmtListDto;
-import com.spring.crud.dto.temp.TbCmtUpdateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterCreateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterSelectDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterUpdateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtCreateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtDeleteDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtListDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtUpdateDto;
 import com.spring.crud.exception.NoMatchedDataException;
 import com.spring.crud.mapper.TbCommentMapper;
 import com.spring.crud.repository.TbCommentRepository;

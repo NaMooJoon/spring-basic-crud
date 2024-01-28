@@ -1,9 +1,9 @@
 package com.spring.crud.mapper;
 
-import com.spring.crud.dto.temp.TbCmtAfterSelectDto;
-import com.spring.crud.dto.temp.TbCmtListDto;
-import com.spring.crud.dto.temp.TbCmtPagedListDto;
-import com.spring.crud.dto.temp.TbCmtScrollListDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterSelectDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtListDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtPagedListDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtScrollListDto;
 import java.util.List;
 
 public interface TbCommentMapper {

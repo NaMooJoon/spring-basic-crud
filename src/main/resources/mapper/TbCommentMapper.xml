@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.crud.mapper.TbCommentMapper">
 
-    <select id="detail" parameterType="hashMap" resultType="com.spring.crud.dto.temp.TbCmtAfterSelectDto">
+    <select id="detail" parameterType="hashMap" resultType="com.spring.crud.dto.TbCmtDto$TbCmtAfterSelectDto">
         SELECT tb_comment.id
             , tb_comment.tb_board_id AS tbBoardId
             , tb_comment.content
@@ -13,7 +13,7 @@
         WHERE tb_comment.id = ${id}
     </select>
 
-    <select id="getList" parameterType="com.spring.crud.dto.temp.TbCmtListDto" resultType="com.spring.crud.dto.temp.TbCmtAfterSelectDto">
+    <select id="getList" parameterType="com.spring.crud.dto.TbCmtDto$TbCmtListDto" resultType="com.spring.crud.dto.TbCmtDto$TbCmtAfterSelectDto">
         SELECT tb_comment.id
              , tb_comment.tb_board_id AS tbBoardId
              , tb_comment.content

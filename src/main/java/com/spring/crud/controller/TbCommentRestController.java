@@ -1,12 +1,12 @@
 package com.spring.crud.controller;
 
-import com.spring.crud.dto.temp.TbCmtAfterCreateDto;
-import com.spring.crud.dto.temp.TbCmtAfterSelectDto;
-import com.spring.crud.dto.temp.TbCmtAfterUpdateDto;
-import com.spring.crud.dto.temp.TbCmtCreateDto;
-import com.spring.crud.dto.temp.TbCmtDeleteDto;
-import com.spring.crud.dto.temp.TbCmtListDto;
-import com.spring.crud.dto.temp.TbCmtUpdateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterCreateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterSelectDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterUpdateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtCreateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtDeleteDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtListDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtUpdateDto;
 import com.spring.crud.service.TbCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;

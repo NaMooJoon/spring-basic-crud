@@ -1,7 +1,7 @@
 package com.spring.crud.domain;
 
-import com.spring.crud.dto.temp.TbCmtAfterCreateDto;
-import com.spring.crud.dto.temp.TbCmtAfterUpdateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterCreateDto;
+import com.spring.crud.dto.TbCmtDto.TbCmtAfterUpdateDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Index;
