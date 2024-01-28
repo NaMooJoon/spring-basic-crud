@@ -10,20 +10,20 @@ Todo
 - User
   - [x] Create
   - [x] Update
-  - [ ] Read
-    - [x] One user detail page
-    - [x] User list
-    - [ ] Page
-    - [ ] Scroll
+  - [x] Read
 - Comment
   - [x] Create
   - [x] Update
   - [x] Read
   - [x] Delete
+- Picture
+  - [x] Create
+  - [x] Update
+  - [x] Read
+  - [x] Delete
+  - [x] File Upload
+  - [ ] File Download
 
-Tech
-- JPA로 DB table create 및 insert
-- Mybatis로 DB select 조회
 
 ### TbBoard (테이블 / Board)
 - #### New Board Create
@@ -38,4 +38,9 @@ Tech
 <img width="1107" alt="Screenshot 2024-01-20 at 2 42 42 AM" src="https://github.com/NaMooJoon/spring-basic-crud/assets/47983023/10f88fc6-fabd-43bc-8db4-7f2742f98821">
 
 
-### TbUser (테이블 / User)
+### TbComment 추가
+![Screenshot 2024-01-28 at 10 05 17 PM](https://github.com/NaMooJoon/spring-basic-crud/assets/47983023/b565f922-9c35-4e9d-a739-905ab80fe374)
+
+### TbPicture 추가
+![Screenshot 2024-01-28 at 9 59 21 PM](https://github.com/NaMooJoon/spring-basic-crud/assets/47983023/fcb8bfcf-36d2-48e8-b585-a6054a290556)
+
