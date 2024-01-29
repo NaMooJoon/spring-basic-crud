@@ -1,6 +1,7 @@
 package com.spring.crud.dto;
 
 import com.spring.crud.domain.TbBoard;
+import com.spring.crud.dto.TbFileDto.TbFileAfterSelectDto;
 import com.spring.crud.dto.TbPictureDto.TbPictureAfterSelectDto;
 import com.spring.crud.dto.common.CommonPagedListRequestDto;
 import com.spring.crud.dto.common.CommonScrollListRequestDto;
@@ -31,6 +32,9 @@ public class TbBoardDto {
 
         @Schema(description = "pictures", example = "pictures URL")
         private String[] pictures;
+
+        @Schema(description = "files", example = "files URL")
+        private String[] files;
 
         public TbBoard toEntity() {
             return TbBoard.of(title, content);
@@ -75,6 +79,9 @@ public class TbBoardDto {
 
         @Schema(description = "pictures", example = "pictures")
         private List<TbPictureAfterSelectDto> pictures;
+
+        @Schema(description = "files", example = "files")
+        private List<TbFileAfterSelectDto> files;
 
         @Schema(description = "deleted", example = "N")
         private String deleted;

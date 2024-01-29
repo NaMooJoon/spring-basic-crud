@@ -39,8 +39,7 @@
     <h1>Board Detail Page</h1>
     <div class="body-div">
         <div>
-            <label for="detail_title">Title:</label>
-            <input readonly id="detail_title" name="title" value=""/>
+            <h2 id="detail_title" name="title">Title: </h2>
         </div>
         <div>
             <label for="detail_content">Content:</label>
@@ -50,6 +49,12 @@
             <fieldset>
                 <legend>Images</legend>
                 <div class="row" , id="div_array_picture"></div>
+            </fieldset>
+        </div>
+        <div>
+            <fieldset>
+                <legend>Attached files</legend>
+                <ul id="ul_files"></ul>
             </fieldset>
         </div>
         <div>
@@ -113,13 +118,20 @@
                 contentType: 'application/json; charset=utf-8',
                 cache: false,
                 success: (data, status, xhr) => {
-                    document.getElementById("detail_title").value = data.title;
+                    $('#detail_title').append(data.title);
                     document.getElementById("detail_content").value = data.content;
                     document.getElementById("detail_deleted").checked = (data.deleted == "N")? false : true;
                     let pictures = data.pictures;
                     for (picture of pictures) {
                         $('#div_array_picture').append(
                             "<img height='100px' src='"+picture.content+"' />"
+                        )
+                    }
+                    let files = data.files;
+                    console.log(files.length + " 개 있습니다");
+                    for (file of files) {
+                        $('#ul_files').append(
+                            `<li><a href="${file.content.replace("uploadfile", "download")}">${file.content.replace("/uploadfile", "")}</a></li>`
                         )
                     }
                 },

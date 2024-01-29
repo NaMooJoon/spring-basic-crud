@@ -104,6 +104,7 @@
 </div>
 
 <script>
+    let board_idx = 1;
     function cancel_search() {
         history.back();
     }
@@ -137,14 +138,13 @@
             }),
             cache: false,
             success: (data) => {
-                alert('data: ' + JSON.stringify(data));
                 if (data.length == 0) {
                     $('#btn-more').hide();
                     $('#btn-end').show();
                 }
                 for (var i = 0; i < data.length; i++) {
                     let tableBodyStr = "<tr>" +
-                        `<td style='text-align: center'>${i + 1}</tda>` +
+                        `<td style='text-align: center'>${board_idx++}</tda>` +
                         `<td>${data[i].title}</td>` +
                         `<td>${data[i].content}</td>` +
                         `<td>${(data[i].createdAt + '').slice(5, -7)}</td>` +

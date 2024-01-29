@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.crud.mapper.TbFileMapper">
+
+    <select id="detail" parameterType="hashMap" resultType="com.spring.crud.dto.TbFileDto$TbFileAfterSelectDto">
+        SELECT tb_file.id
+            , tb_file.tb_board_id AS tbBoardId
+            , tb_file.content
+            , tb_file.deleted
+            , tb_file.created_at AS createdAt
+            , tb_file.modified_at AS modifiedAt
+        FROM tb_file
+        WHERE tb_file.id = ${id}
+    </select>
+
+    <select id="getList" parameterType="com.spring.crud.dto.TbFileDto$TbFileListDto" resultType="com.spring.crud.dto.TbFileDto$TbFileAfterSelectDto">
+        SELECT tb_file.id
+             , tb_file.tb_board_id AS tbBoardId
+             , tb_file.content
+             , tb_file.deleted
+             , tb_file.created_at AS createdAt
+             , tb_file.modified_at AS modifiedAt
+        FROM tb_file
+        WHERE tb_file.id is not null
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_file.tb_board_id = #{tbBoardId} </if>
+        <if test="content != null and content != ''">AND tb_file.content LIKE CONCAT('%', #{content}, '%') </if>
+        <if test="deleted != null and deleted != ''">AND tb_file.deleted = #{deleted} </if>
+        ORDER BY createdAt ASC
+    </select>
+
+    <select id="pagedListCount" parameterType="com.spring.crud.dto.TbFileDto$TbFilePagedListDto" resultType="Integer">
+        SELECT COUNT(tb_file.id) AS listCount
+        FROM tb_file
+        WHERE tb_file.id is not null
+        <if test="beginDate != null and beginDate != ''">AND tb_file.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_file.created_at</if>
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_file.tb_board_id = #{tbBoardId} </if>
+        <if test="content != null and content != ''">AND tb_file.content LIKE CONCAT('%', #{content}, '%') </if>
+        <if test="deleted != null and deleted != ''">AND tb_file.deleted = #{deleted} </if>
+    </select>
+
+    <select id="page" parameterType="com.spring.crud.dto.TbFileDto$TbFilePagedListDto" resultType="com.spring.crud.dto.TbFileDto$TbFileAfterSelectDto">
+        SELECT tb_file.id
+            , tb_file.tb_board_id AS tbBoardId
+            , tb_file.content
+            , tb_file.deleted
+            , tb_file.created_at AS createdAt
+            , tb_file.modified_at AS modifiedAt
+        FROM tb_file
+        WHERE tb_file.id is not null
+        <if test="beginDate != null and beginDate != ''">AND tb_file.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_file.created_at</if>
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_file.tb_board_id = #{tbBoardId} </if>
+        <if test="content != null and content != ''">AND tb_file.content LIKE CONCAT('%', #{content}, '%') </if>
+        <if test="deleted != null and deleted != ''">AND tb_file.deleted = #{deleted} </if>
+        <if test="orderBy == 'createAt'">ORDER BY createdAt </if>
+        <if test="orderWay == 'asc'">ASC</if>
+        <if test="orderWay == 'desc'">DESC</if>
+        LIMIT #{offset}, #{perPage}
+    </select>
+
+    <select id="getScroll" parameterType="com.spring.crud.dto.TbFileDto$TbFileScrollListDto" resultType="com.spring.crud.dto.TbFileDto$TbFileAfterSelectDto">
+        SELECT tb_file.id
+             , tb_file.tb_board_id AS tbBoardId
+             , tb_file.content
+             , tb_file.deleted
+             , tb_file.created_at AS createdAt
+             , tb_file.modified_at AS modifiedAt
+        FROM tb_file
+        WHERE tb_file.id is not null
+        <if test="beginDate != null and beginDate != ''">AND tb_file.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
+        <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_file.created_at</if>
+        <if test="tbBoardId != null and tbBoardId != ''">AND tb_file.tb_board_id = #{tbBoardId} </if>
+        <if test="content != null and content != ''">AND tb_file.content LIKE CONCAT('%', #{content}, '%') </if>
+        <if test="searchDate != null and searchDate != ''">
+            <if test="searchWay == 'backwards'"> AND tb_file.created_at > STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') ORDER BY tb_file.created_at ASC</if>
+            <if test="searchWay == 'forwards'">AND STR_TO_DATE(#{searchDate}, '%Y-%m-%d %H:%i:%s.%f') > tb_file.created_at ORDER BY tb_file.created_at DESC</if>
+        </if>
+        <if test="searchDate == null or searchDate == ''">ORDER BY tb_file.created_at ASC</if>
+        LIMIT 0, #{requestBoardSize}
+    </select>
+
+
+</mapper>
