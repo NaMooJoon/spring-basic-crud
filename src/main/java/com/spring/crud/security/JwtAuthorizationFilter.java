@@ -1,5 +1,6 @@
 package com.spring.crud.security;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.spring.crud.domain.TbUser;
 import com.spring.crud.exception.NoMatchedDataException;
@@ -51,48 +52,31 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             throws IOException, ServletException {
 
         String jwtHeader = request.getHeader(externalProperties.getAccessKey());
-        // 토큰이 없을 시 Authentication이 없는 상태로 doFilter -> Spring Security가 잡아냄;
         if (jwtHeader == null || !jwtHeader.startsWith(externalProperties.getTokenPrefix())) {
+            // 토큰이 없을 시 Authentication이 없는 상태로 doFilter -> Spring Security가 잡아냄;
             chain.doFilter(request, response);
             return;
         }
-        String refreshToken = null;
-        String accessToken = null;
-        String tbUserId = null;
         try {
-            refreshToken = request.getHeader(externalProperties.getRefreshKey());
-            if (refreshToken != null) {
-                refreshToken = refreshToken.replace(externalProperties.getTokenPrefix(), "");
-            }
-            try {
-                accessToken = request
-                        .getHeader(externalProperties.getAccessKey())
-                        .replace(externalProperties.getTokenPrefix(), "");
-                tbUserId = authService.verifyAccessToken(accessToken);
-            } catch (TokenExpiredException expired) {
-                logger.error("ACCESS TOKEN REISSUE");
-                tbUserId = authService.verifyRefreshToken(refreshToken);
-                JwtTokenDto newTokenDto = authService.issueAccessToken(refreshToken);
-                response.addHeader(externalProperties.getAccessKey(), newTokenDto.getAccessToken());
-            }
+            String accessToken = jwtHeader.replace(externalProperties.getTokenPrefix(), "");
+            String tbUserId = authService.verifyAccessToken(accessToken);
 
-        } catch (TokenExpiredException expired) {
-            logger.error("REFRESH TOKEN IS EXPIRED");
-            request.setAttribute("token_expired", expired.getMessage());
+            // 1. 유저 조회, 없을 시 return NoMatchingDataException(404)
+            TbUser tbUserEntity = tbUserRepository.findEntityGraphRoleTypeById(tbUserId)
+                    .orElseThrow(() -> new NoMatchedDataException("AccessToken에 해당되는 user가 없음."));
+
+            // 2. Authentication 생성
+            PrincipalDetails principalDetails = new PrincipalDetails(tbUserEntity);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
+
+            // 3. SecurityContextHolder에 Authentication을 담는다 : Spring Security가 권한 처리 할 수 있도록 한다.
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        } catch (TokenExpiredException | JWTDecodeException | NoMatchedDataException e) {
+            logger.error("ACCESS IS EXPIRED!!");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 
-        // 1. 유저 조회, 없을 시 return NoMatchingDataException(404)
-        TbUser tbUserEntity = tbUserRepository.findEntityGraphRoleTypeById(tbUserId)
-                .orElseThrow(() -> new NoMatchedDataException("AccessToken에 해당되는 user가 없음."));
-
-        // 2. Authentication 생성
-        PrincipalDetails principalDetails = new PrincipalDetails(tbUserEntity);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(principalDetails, null, principalDetails.getAuthorities());
-
-        // 3. SecurityContextHolder에 Authentication을 담는다 : Spring Security가 권한 처리 할 수 있도록 한다.
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-//        response.setHeader("tbUserId", tbUserId); // 사용자 정보 추출을 위한 코드
         chain.doFilter(request, response);
     }
 

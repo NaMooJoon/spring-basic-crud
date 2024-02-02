@@ -100,13 +100,50 @@
             error: (data) => {
                 alert(JSON.stringify(data));
                 switch (data.status) {
+                    case 401:
+                        alert("access token이 만료되어 다시 불러옵니다.");
+                        access_token();
+                        break;
                     case 403:
+                    case 404:
                         alert("로그인 하셔야 이용하실 수 있습니다.");
                         window.location = "/user/login";
                         break;
                 }
             },
         });
+    }
+
+    function access_token() {
+        $.ajax({
+            url: "/api/auth/access-token",
+            method: "POST",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("RefreshToken", localStorage.getItem("refreshToken"));
+            },
+            cache: false,
+            success: (data, status, xhr) => {
+                switch (xhr.status) {
+                    case 200:
+                        let accessToken = xhr.getResponseHeader("Authorization");
+                        alert(accessToken);
+                        localStorage.setItem("accessToken", accessToken);
+                        break;
+                    default:
+                        console.log("no matching status code...")
+                }
+            },
+            error: (data) => {
+                alert(JSON.stringify(data));
+                switch (data.status) {
+                    case 401:
+                        alert("Refresh Token이 만료되어 login창으로 이동합니다.");
+                        window.location = "/user/login";
+                        break;
+                }
+            }
+        })
     }
 
     let limit_each_file_size = 10;
