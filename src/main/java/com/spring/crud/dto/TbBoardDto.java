@@ -18,6 +18,7 @@ import lombok.Setter;
 
 public class TbBoardDto {
     @Getter
+    @Setter
     public static class TbBoardCreateRequestDto {
 
         @Schema(description = "title", example = "Post Title...")
@@ -30,6 +31,9 @@ public class TbBoardDto {
         @Size(max = 10_000)
         private String content;
 
+        @Schema(description = "tbUserId", example = "Author user id")
+        private String tbUserId;
+
         @Schema(description = "pictures", example = "pictures URL")
         private String[] pictures;
 
@@ -37,12 +41,16 @@ public class TbBoardDto {
         private String[] files;
 
         public TbBoard toEntity() {
-            return TbBoard.of(title, content);
+            return TbBoard.of(title, content, tbUserId);
         }
     }
 
     @Getter
+    @Builder
     public static class TbBoardCreateResponseDto {
+
+        @Schema(description = "id", example = "length32textNumber")
+        private String id;
 
         @Schema(description = "title", example = "Post Title...")
         @NotNull
@@ -54,11 +62,6 @@ public class TbBoardDto {
         @Size(max = 10_000)
         private String content;
 
-        @Builder
-        public TbBoardCreateResponseDto(String title, String content) {
-            this.title = title;
-            this.content = content;
-        }
     }
 
     @Builder

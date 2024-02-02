@@ -2,15 +2,21 @@ package com.spring.crud.domain;
 
 import com.spring.crud.dto.TbUserDto.TbUserAfterCreateDto;
 import com.spring.crud.dto.TbUserDto.TbUserAfterUpdateDto;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import net.minidev.json.annotate.JsonIgnore;
 
 @Getter
 @Setter
@@ -22,7 +28,6 @@ import lombok.ToString;
                 @Index(name = "IDX_tb_user_process", columnList = "process")
         },
         uniqueConstraints = {
-                @UniqueConstraint(name = "UQ_tb_user_uid", columnNames = {"uid"}),
                 @UniqueConstraint(name = "UQ_tb_user_nick", columnNames = {"nick"})
         }
 )
@@ -30,18 +35,19 @@ import lombok.ToString;
 public class TbUser extends AuditingFields {
 
     @Column(nullable = false)
-    private String uid;
+    private String username;
 
+    @JsonIgnore
     @Column(nullable = false)
-    private String pw;
+    private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String nick;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String joinFrom;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String process;
 
 
@@ -57,12 +63,21 @@ public class TbUser extends AuditingFields {
     @Column(nullable = true, length = 10_000)
     private String content;
 
-    protected TbUser() {}
+    @OneToMany(mappedBy = "tbUser", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<TbUserRoleType> tbUserRoleType = new ArrayList<>();
 
+    public List<TbUserRoleType> getRoleList() {
+        if (this.tbUserRoleType.size() > 0) {
+            return tbUserRoleType;
+        }
+        return new ArrayList<>();
+    }
+
+    protected TbUser() {}
     @Builder
-    private TbUser(String uid, String pw, String nick, String joinFrom, String process) {
-        this.uid = uid;
-        this.pw = pw;
+    private TbUser(String username, String password, String nick, String joinFrom, String process) {
+        this.username = username;
+        this.password = password;
         this.nick = nick;
         this.joinFrom = joinFrom;
         this.process = process;

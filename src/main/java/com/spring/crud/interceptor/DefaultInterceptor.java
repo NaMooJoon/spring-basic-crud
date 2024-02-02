@@ -29,22 +29,24 @@ public class DefaultInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String requestURI = request.getRequestURI();
 
-//        logger.info("0: REQUEST [{}]", request.getHeaderNames().toString());
-
+        /*
+        logger.info("0: REQUEST [{}]", request.getHeaderNames().toString());
         request.setAttribute("test_req", "123");
-
+         */
+        /*
         Enumeration headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String name = (String) headerNames.nextElement();
             String value = request.getHeader(name);
             logger.info("0-1: REQUEST [{}][{}]", name, value);
         }
-        /* @RequestMapping : HandlerMethod가 넘어온다.
-         * static resource : ResourcehttpRequesthandler가 넘어온다.
-         */
+
+        // @RequestMapping : HandlerMethod가 넘어온다.
+        // static resource : ResourcehttpRequesthandler가 넘어온다.
         if (handler instanceof HandlerMethod) {
             HandlerMethod hm = (HandlerMethod) handler;
         }
+        */
         logger.info("1: REQUEST [{}][{}]", requestURI, handler);
         return true;
     }
@@ -61,7 +63,13 @@ public class DefaultInterceptor implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        logger.info("postHandler [{}]", modelAndView);
+        /*
+        logger.info("post / request [{}]", request.getAttribute("test_auth"));
+        logger.info("post // request [{}]", request.getAttribute("test_auth_1"));
+        logger.info("2-1: RESPONSE [{}][{}]", response.getStatus(), response.getHeaderNames());
+        logger.info("2-2: RESPONSE [{}]", response.getHeader("test_header_1"));
+        logger.info("post Handle [{}]", modelAndView);
+         */
     }
 
     /**

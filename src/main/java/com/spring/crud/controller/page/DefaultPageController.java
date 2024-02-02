@@ -55,15 +55,15 @@ public class DefaultPageController {
             return_byte = IOUtils.toByteArray(in);
 
         } catch (FileNotFoundException e) {
-            logger.info("FileNotFoundException / ");
+            logger.info("FileNotFoundException / " + filename);
         } catch (IOException e) {
-            logger.info("IOException /");
+            logger.info("IOException /" + filename);
         } finally {
             if (in != null) {
                 try {
                     in.close();
                 } catch (IOException e) {
-                    logger.info("final Exception / IOException");
+                    logger.info("final Exception / IOException" + filename);
                 }
             }
         }
@@ -77,15 +77,16 @@ public class DefaultPageController {
         String root_path = FileUpload.path(request);
         logger.info("root_path: " + root_path);
         File file = new File(root_path + filename);
+        // 다음은 response 설정해주는 부분.
         String mimeType = URLConnection.guessContentTypeFromName(filename); // 파일의 mime타입 확인
-        if (mimeType == null) {
+        if (mimeType == null) { // mime타입이 없는 경우 application/octet-stream으로 설정
             mimeType = "application/octet-stream";
         }
         response.setContentType(mimeType); // Response에 mimType 설정
         response.setContentLength((int) file.length());
         response.setHeader("Content-Disposition", "attachment; filename=\"" + URLEncoder.encode(file.getName(), "utf-8") +"\"");
-        InputStream inputStream = new BufferedInputStream(new FileInputStream(file)); // InputStream에 객체
-        FileCopyUtils.copy(inputStream, response.getOutputStream());
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file)); // InputStream 객체
+        FileCopyUtils.copy(inputStream, response.getOutputStream()); // inputStream으로 파일을 읽고, outStream으로 파일을 쓴다.
 
     }
 }

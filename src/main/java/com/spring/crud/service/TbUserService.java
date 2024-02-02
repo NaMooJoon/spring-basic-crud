@@ -10,9 +10,11 @@ import com.spring.crud.dto.TbUserDto.TbUserUpdateDto;
 import java.util.List;
 
 public interface TbUserService {
+    TbUserAfterCreateDto signup(TbUserCreateDto params);
+
     TbUserAfterCreateDto create(TbUserCreateDto params);
 
-    TbUserAfterSelectDto get(String id);
+    TbUserAfterSelectDto detail(String id);
 
     TbUserAfterUpdateDto update(TbUserUpdateDto params);
 

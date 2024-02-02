@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        button {
+            padding: 2px;
+            cursor: pointer;
+        }
+        .body-div {
+            width: 70%;
+        }
+        .right-pos {
+            padding-top: 10px;
+            position: relative;
+            float: right;
+        }
+        *:required {
+            background-color: palegoldenrod;
+        }
+        .req {
+            color: red;
+        }
+        label {
+        }
+        .search-div {
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Login Page</h1>
+<div class="body-div">
+        <fieldset>
+            <legend>Input your ID & PW:</legend>
+            <div class="search-div">
+                <label for="login_id">ID<span class="req">*</span>: </label>
+                <input id="login_id" required/>
+            </div>
+            <div class="search-div">
+                <label for="login_pw">PW<span class="req">*</span>: </label>
+                <input id="login_pw" required />
+            </div>
+        </fieldset>
+        <div class="right-pos">
+            <button id="issue_token" onclick="access_token()">AccessToken</button>
+            <button id="signup-btn" onclick="window.location='/user/signup'">SignUp</button>
+            <button id="login-btn" onclick="login_user()">Login</button>
+        </div>
+</div>
+<script>
+    function login_user(){
+        $.ajax({
+            url: "/api/login",
+            type: "POST",
+            contentType : 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                'username' : $("#login_id").val(),
+                'password': $("#login_pw").val(),
+            }),
+            cache: false,
+            success: (data, status, xhr)=>{
+                let refreshToken = xhr.getResponseHeader("RefreshToken");
+                let accessToken = xhr.getResponseHeader("Authorization");
+                localStorage.setItem("refreshToken", refreshToken);
+                localStorage.setItem("accessToken", accessToken);
+                alert("로그인 성공");
+                window.location = "/";
+            },
+            error: (data)=>{
+                switch (data.status) {
+                    case 401:
+                        alert("아이디 또는 비밀번호가 잘못 되었습니다.");
+                        break;
+                    case 403:
+                        alert("유효하지 않은 정보를 입력했습니다.");
+                        break;
+                }
+            },
+        });
+
+    }
+
+    function access_token() {
+
+        $.ajax({
+            url: "/api/auth/access-token",
+            method: "POST",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("RefreshToken", localStorage.getItem("refreshToken"));
+            },
+            cache: false,
+            success: (data, status, xhr) => {
+                switch (xhr.status) {
+                    case 200:
+                        let accessToken = xhr.getResponseHeader("Authorization");
+                        alert(accessToken);
+                        localStorage.setItem("accessToken", accessToken);
+                        break;
+                    default:
+                        console.log("no matching status code...")
+                }
+            },
+            error: (data) => {
+                alert(JSON.stringify(data));
+            }
+        })
+    }
+
+</script>
+</body>
+</html>

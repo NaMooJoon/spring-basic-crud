@@ -78,6 +78,10 @@
         $.ajax({
             url: "/api/board",
             type: "POST",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+            },
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 'title': $('#create_title').val(),
@@ -87,10 +91,20 @@
             }),
             cache: false,
             success: (data, status, xhr) => {
+                alert("글 등록 성공!");
+                let accessToken = xhr.getResponseHeader("Authorization");
+                localStorage.setItem("accessToken", accessToken);
+                alert(accessToken);
                 window.location = '/board/scroll';
             },
             error: (data) => {
                 alert(JSON.stringify(data));
+                switch (data.status) {
+                    case 403:
+                        alert("로그인 하셔야 이용하실 수 있습니다.");
+                        window.location = "/user/login";
+                        break;
+                }
             },
         });
     }
@@ -148,6 +162,10 @@
             },
             error: (data) => {
                 switch(data.status){
+                    case 403:
+                        alert("로그인 하셔야 이용하실 수 있습니다.");
+                        window.location = "/user/login";
+                        break;
                     case 500:
                         alert("권한 외의 요청입니다.");
                         location.href="/index";

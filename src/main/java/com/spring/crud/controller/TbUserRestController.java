@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,9 +42,10 @@ public class TbUserRestController {
                     + "@param TbuserCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbuserAfterCreateDto\\> <br />"
                     + "@exception 중복 <br />")
-    @PostMapping("")
-    public ResponseEntity<TbUserAfterCreateDto> save(@Valid @RequestBody TbUserCreateDto params) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(tbUserService.create(params));
+    @PreAuthorize("permitAll()")
+    @PostMapping("/signup")
+    public ResponseEntity<TbUserAfterCreateDto> signup(@Valid @RequestBody TbUserCreateDto params) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(tbUserService.signup(params));
     }
 
     @Operation(summary = "회원 정보 조회",
@@ -53,7 +55,7 @@ public class TbUserRestController {
                     + "@exception 정보 없음 <br />")
     @GetMapping("/{id}")
     public ResponseEntity<TbUserAfterSelectDto> get(@PathVariable("id") String id) {
-        TbUserAfterSelectDto tbUserAfterSelectDto = tbUserService.get(id);
+        TbUserAfterSelectDto tbUserAfterSelectDto = tbUserService.detail(id);
         return ResponseEntity.status(HttpStatus.OK).body(tbUserAfterSelectDto);
     }
 

@@ -36,6 +36,7 @@ public class TbComment extends AuditingFields {
 
     public TbCmtAfterCreateDto toAfterCreateDto() {
         return TbCmtAfterCreateDto.builder()
+                .id(super.getId())
                 .content(content)
                 .build();
     }

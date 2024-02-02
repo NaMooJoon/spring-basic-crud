@@ -28,19 +28,25 @@ public class TbBoard extends AuditingFields {
     @Column(nullable = false, length = 10_000)
     private String content;
 
+    @Setter
+    @Column(nullable = false)
+    private String tbUserId;
+
     protected TbBoard() {}
 
-    private TbBoard(String title, String content) {
+    public TbBoard(String title, String content, String tbUserId) {
         this.title = title;
         this.content = content;
+        this.tbUserId = tbUserId;
     }
 
-    public static TbBoard of(String title, String content) {
-        return new TbBoard(title, content);
+    public static TbBoard of(String title, String content, String tbUserId) {
+        return new TbBoard(title, content, tbUserId);
     }
 
     public TbBoardCreateResponseDto toCreateResponseDto() {
         return TbBoardCreateResponseDto.builder()
+                .id(super.getId())
                 .title(title)
                 .content(content)
                 .build();

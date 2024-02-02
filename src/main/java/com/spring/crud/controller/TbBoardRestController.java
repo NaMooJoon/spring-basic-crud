@@ -4,6 +4,7 @@ import com.spring.crud.dto.TbBoardDto.*;
 import com.spring.crud.dto.TbBoardDto.TbBoardPagedRequestDto;
 import com.spring.crud.dto.TbBoardDto.TbBoardScrollListRequestDto;
 import com.spring.crud.dto.common.CommonPagedListResponseDto;
+import com.spring.crud.security.PrincipalDetails;
 import com.spring.crud.service.TbBoardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,9 +44,14 @@ public class TbBoardRestController {
                     + "@param TbBoardCreateRequestDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbBoardCreateResponseDto\\> <<br />"
                     + "@exception 중복 <br />")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("")
-    public ResponseEntity<TbBoardCreateResponseDto> save(@RequestBody TbBoardCreateRequestDto params, HttpServletRequest request) {
-//        logger.info(">>>> " + request.getAttribute("test_req"));
+    public ResponseEntity<TbBoardCreateResponseDto> save(@RequestBody TbBoardCreateRequestDto params,
+                                                         @AuthenticationPrincipal
+                                                         PrincipalDetails principalDetails) {
+        // Spring security를 통해서 어느 유저가 해당 api를 접근했는 지 알 수 있음.
+        String tbUserId = principalDetails.getTbUser().getId();
+        params.setTbUserId(tbUserId);
         return ResponseEntity.status(HttpStatus.CREATED).body(tbBoardService.create(params));
     }
 
@@ -52,6 +60,7 @@ public class TbBoardRestController {
                     + "@param TbBoardCreateRequestDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbBoardUpdateResponseDto\\> <<br />"
                     + "@exception 중복 <br />")
+    @PreAuthorize("permitAll()")
     @PutMapping("")
     public ResponseEntity<TbBoardUpdateResponseDto> update(@RequestBody TbBoardUpdateRequestDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbBoardService.update(params));
@@ -62,6 +71,7 @@ public class TbBoardRestController {
                     + "@param id(PathVariable) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />")
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public ResponseEntity<TbBoardSelectResponseDto> get(@PathVariable("id") String id) {
         TbBoardSelectResponseDto tbBoardSelectResponseDto = tbBoardService.get(id);
@@ -73,6 +83,7 @@ public class TbBoardRestController {
                     + "@param (no parameter) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
                     + "@exception (no exception) <br />")
+    @PreAuthorize("permitAll()")
     @PostMapping("/list")
     public ResponseEntity<List<TbBoardSelectResponseDto>> list(@RequestBody TbBoardListRequestDto params) {
         List<TbBoardSelectResponseDto> tbBoardSelectResponseDtoList = tbBoardService.list(params);
@@ -84,6 +95,7 @@ public class TbBoardRestController {
                     + "@param (TbBoardPagedRequestDto) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<CommonPagedListResponseDto<TbBoardSelectResponseDto>\\> <br />"
                     + "@exception (no exception) <br />")
+    @PreAuthorize("permitAll()")
     @PostMapping("/page")
     public ResponseEntity<CommonPagedListResponseDto<TbBoardSelectResponseDto>> pagedList(@RequestBody TbBoardPagedRequestDto params) {
         CommonPagedListResponseDto<TbBoardSelectResponseDto> responseBody = tbBoardService.pagedList(params);
@@ -95,6 +107,7 @@ public class TbBoardRestController {
                     + "@param (no parameter) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
                     + "@exception (no exception) <br />")
+    @PreAuthorize("permitAll()")
     @PostMapping("/scroll")
     public ResponseEntity<List<TbBoardSelectResponseDto>> scroll(@RequestBody TbBoardScrollListRequestDto params) {
         List<TbBoardSelectResponseDto> tbBoardSelectResponseDtoList = tbBoardService.scroll(params);

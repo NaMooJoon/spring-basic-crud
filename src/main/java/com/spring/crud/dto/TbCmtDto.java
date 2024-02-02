@@ -1,8 +1,10 @@
 package com.spring.crud.dto;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.spring.crud.domain.TbComment;
 import com.spring.crud.dto.common.CommonPagedListRequestDto;
 import com.spring.crud.dto.common.CommonScrollListRequestDto;
+import com.spring.crud.dto.common.CommonSelectDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -21,6 +23,9 @@ public class TbCmtDto {
     @AllArgsConstructor
     public static class TbCmtAfterCreateDto {
 
+        @Schema(description = "id", example = "length32textNumber")
+        private String id;
+
         @Schema(description = "content", example = "contents ...")
         @Size(max = 300)
         private String content;
@@ -31,25 +36,13 @@ public class TbCmtDto {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TbCmtAfterSelectDto {
-
-        @Schema(description = "id", example = "id")
-        private String id;
+    public static class TbCmtAfterSelectDto extends CommonSelectDto {
 
         @Schema(description = "tbBoardId", example = "Board id")
         private String tbBoardId;
 
         @Schema(description = "content", example = "contents ...")
         private String content;
-
-        @Schema(description = "deleted", example = "Y or N")
-        private String deleted;
-
-        @Schema(description = "createdAt", example = "2024-01-01 00:00:00.000000")
-        private String createdAt;
-
-        @Schema(description = "modifiedAt", example = "2024-01-01 00:00:00.000000")
-        private String modifiedAt;
     }
 
     @Builder

@@ -4,6 +4,7 @@ import com.spring.crud.domain.TbComment;
 import com.spring.crud.domain.TbPicture;
 import com.spring.crud.dto.common.CommonPagedListRequestDto;
 import com.spring.crud.dto.common.CommonScrollListRequestDto;
+import com.spring.crud.dto.common.CommonSelectDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -31,10 +32,7 @@ public class TbPictureDto {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class TbPictureAfterSelectDto {
-
-        @Schema(description = "id", example = "id")
-        private String id;
+    public static class TbPictureAfterSelectDto extends CommonSelectDto {
 
         @Schema(description = "tbBoardId", example = "Board id")
         private String tbBoardId;
@@ -42,14 +40,6 @@ public class TbPictureDto {
         @Schema(description = "content", example = "contents ...")
         private String content;
 
-        @Schema(description = "deleted", example = "Y or N")
-        private String deleted;
-
-        @Schema(description = "createdAt", example = "2024-01-01 00:00:00.000000")
-        private String createdAt;
-
-        @Schema(description = "modifiedAt", example = "2024-01-01 00:00:00.000000")
-        private String modifiedAt;
     }
 
     @Builder

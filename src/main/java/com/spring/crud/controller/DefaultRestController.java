@@ -27,18 +27,17 @@ public class DefaultRestController {
     )
     @PostMapping("/uploadFile")
     public ResponseEntity<String> uploadFile(@Valid @RequestParam MultipartFile file, HttpServletRequest request) {
-        String returnValue = null;
 
         if (file == null || "".equals(file.getOriginalFilename() + "")) {
             return null;
         }
-        System.out.println("MultipartFile 호출 성공 : " + file.getOriginalFilename() + "");
+
+        String returnValue = null;
         try {
             returnValue = FileUpload.local(file, request);
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            e.printStackTrace();
         }
-        System.out.println("In ctrl: returnValue = " + returnValue);
         return ResponseEntity.status(HttpStatus.CREATED).body(returnValue);
     }
 }

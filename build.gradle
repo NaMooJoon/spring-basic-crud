@@ -32,10 +32,15 @@ dependencies {
     // aws 파일 업로드를 위함
     implementation group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.12.460'
     implementation group: 'commons-io', name: 'commons-io', version: '2.13.0'
-    /*
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // Spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+    implementation group: 'com.auth0', name: 'java-jwt', version: '4.4.0'
 
-    */
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // for SNS login
+
     runtimeOnly 'com.mysql:mysql-connector-j' //db
 
     annotationProcessor "jakarta.annotation:jakarta.annotation-api" // java.lang.NoClassDefFoundError (javax.annotation.Generated) 관련 대응 코드
