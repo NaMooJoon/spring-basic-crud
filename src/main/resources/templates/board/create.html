@@ -101,10 +101,10 @@
                 alert(JSON.stringify(data));
                 switch (data.status) {
                     case 401:
+                    case 403:
                         alert("access token이 만료되어 다시 불러옵니다.");
                         access_token();
                         break;
-                    case 403:
                     case 404:
                         alert("로그인 하셔야 이용하실 수 있습니다.");
                         window.location = "/user/login";

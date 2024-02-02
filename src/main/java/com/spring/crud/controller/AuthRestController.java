@@ -1,5 +1,6 @@
 package com.spring.crud.controller;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.spring.crud.security.ExternalProperties;
 import com.spring.crud.security.JwtTokenDto;
@@ -44,6 +45,7 @@ public class AuthRestController {
             responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
             return responseEntity;
         }
+        refreshToken = refreshToken.replace(externalProperties.getTokenPrefix(), "");
         try {
             // 쿠키에 Refresh Token이 있으면 검증 후 Access token 발급.
             JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
@@ -53,7 +55,7 @@ public class AuthRestController {
             // return 200(OK)
             responseEntity = ResponseEntity.status(HttpStatus.OK).build();
         } catch (JWTVerificationException e) { // Invalid refresh token
-            e.printStackTrace();
+//            e.printStackTrace();
             responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
         return responseEntity;
