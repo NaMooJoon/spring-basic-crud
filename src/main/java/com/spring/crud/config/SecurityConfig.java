@@ -22,7 +22,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfig {
 
     private final TbUserRepository tbUserRepository;
     private final CorsFilterConfiguration corsFilterConfiguration;
@@ -30,8 +30,8 @@ public class SecurityConfiguration {
     private final AuthService authService;
     private final ExternalProperties externalProperties;
 
-    public SecurityConfiguration(TbUserRepository tbUserRepository, CorsFilterConfiguration corsFilterConfiguration,
-                                 ObjectMapper objectMapper, AuthService authService, ExternalProperties externalProperties) {
+    public SecurityConfig(TbUserRepository tbUserRepository, CorsFilterConfiguration corsFilterConfiguration,
+                          ObjectMapper objectMapper, AuthService authService, ExternalProperties externalProperties) {
         this.tbUserRepository = tbUserRepository;
         this.corsFilterConfiguration = corsFilterConfiguration;
         this.objectMapper = objectMapper;

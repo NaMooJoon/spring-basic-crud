@@ -77,6 +77,12 @@ public class TbBoardDto {
         @Schema(description = "title", example = "title")
         private String title;
 
+        @Schema(description = "tbUserId", example = "author user id")
+        private String tbUserId;
+
+        @Schema(description = "author", example = "author nick name")
+        private String author;
+
         @Schema(description = "content", example = "content")
         private String content;
 

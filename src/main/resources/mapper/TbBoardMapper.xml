@@ -32,8 +32,11 @@
         , tb_board.deleted
         , tb_board.created_at AS createdAt
         , tb_board.modified_at AS modifiedAt
-        FROM tb_board
+        , tb_board.tb_user_id AS tbUserId
+        , tb_user.nick AS author
+        FROM tb_board, tb_user
         WHERE tb_board.id is not null
+        AND tb_board.tb_user_id = tb_user.id
         <if test="beginDate != null and beginDate != ''">AND tb_board.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
         <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.created_at</if>
         <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>
@@ -62,8 +65,11 @@
         , tb_board.deleted
         , tb_board.created_at AS createdAt
         , tb_board.modified_at AS modifiedAt
-        FROM tb_board
+        , tb_board.tb_user_id AS tbUserId
+        , tb_user.nick AS author
+        FROM tb_board, tb_user
         WHERE tb_board.id is not null
+        AND tb_board.tb_user_id = tb_user.id
         <if test="beginDate != null and beginDate != ''">AND tb_board.created_at >= CONCAT(#{beginDate}, ' 00:00:00.000000')</if>
         <if test="endDate != null and endDate != ''">AND CONCAT(#{endDate}, ' 23:59:59.999999') >= tb_board.created_at</if>
         <if test="title != null and title != ''">AND tb_board.title LIKE CONCAT('%', #{title}, '%')</if>
