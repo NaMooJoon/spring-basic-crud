@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,7 @@ public class TbPictureRestController {
                     + "@param TbPictureCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbPictureAfterCreateDto\\> <<br />"
                     + "@exception 중복 <br />")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("")
     public ResponseEntity<TbPictureAfterCreateDto> create(@RequestBody TbPictureCreateDto params) {
         return ResponseEntity.status(HttpStatus.CREATED).body(tbPictureService.create(params));
@@ -50,6 +52,7 @@ public class TbPictureRestController {
                     + "@param TbPictureUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbPictureAfterUpdateDto\\> <<br />"
                     + "@exception 중복 <br />")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("")
     public ResponseEntity<TbPictureAfterUpdateDto> update(@RequestBody TbPictureUpdateDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbPictureService.update(params));
@@ -60,6 +63,7 @@ public class TbPictureRestController {
                     + "@param TbPictureDeleteDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbPictureAfterUpdateDto\\> <<br />"
                     + "@exception 중복 <br />")
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
     public ResponseEntity<TbPictureAfterUpdateDto> delete(@RequestBody TbPictureDeleteDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbPictureService.delete(params));
@@ -70,6 +74,7 @@ public class TbPictureRestController {
                     + "@param (TbPictureListDto) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<List<TbPictureAfterSelectDto>\\> <br />"
                     + "@exception (no exception) <br />")
+    @PreAuthorize("permitAll()")
     @PostMapping("/list")
     public ResponseEntity<List<TbPictureAfterSelectDto>> list(@RequestBody TbPictureListDto params) {
         List<TbPictureAfterSelectDto> tbPictureAfterSelectDtoList = tbPictureService.list(params);
@@ -81,6 +86,7 @@ public class TbPictureRestController {
                     + "@param (TbPictureListDto) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<List<TbPictureAfterSelectDto>\\> <br />"
                     + "@exception (no exception) <br />")
+    @PreAuthorize("permitAll()")
     @PostMapping("/scroll")
     public ResponseEntity<List<TbPictureAfterSelectDto>> scroll(@RequestBody TbPictureScrollListDto params) {
         List<TbPictureAfterSelectDto> tbPictureAfterSelectDtoList = tbPictureService.moreList(params);

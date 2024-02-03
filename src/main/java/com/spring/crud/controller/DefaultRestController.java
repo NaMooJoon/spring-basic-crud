@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ public class DefaultRestController {
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<String\\> \n"
                     + "@exception \n"
     )
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/uploadFile")
     public ResponseEntity<String> uploadFile(@Valid @RequestParam MultipartFile file, HttpServletRequest request) {
 

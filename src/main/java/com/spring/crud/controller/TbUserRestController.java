@@ -53,6 +53,7 @@ public class TbUserRestController {
                     + "@param id(PathVariable) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbboardSelectDto\\> <br />"
                     + "@exception 정보 없음 <br />")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<TbUserAfterSelectDto> get(@PathVariable("id") String id) {
         TbUserAfterSelectDto tbUserAfterSelectDto = tbUserService.detail(id);
@@ -65,6 +66,7 @@ public class TbUserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserAfterUpdateDto\\> <br />"
                     + "@exception 해당 자료 없음 <br />"
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("")
     public ResponseEntity<TbUserAfterUpdateDto> update(@Valid @RequestBody TbUserUpdateDto params) {
         TbUserAfterUpdateDto tbUserAfterUpdateDto = tbUserService.update(params);
@@ -77,6 +79,7 @@ public class TbUserRestController {
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbuserSelectDto\\> <br />"
                     + "@exception (no Exception) <br />"
     )
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/list")
     public ResponseEntity<List<TbUserAfterListSelectDto>> list(@Valid @RequestBody TbUserListSelectDto params) {
         List<TbUserAfterListSelectDto> tbUserAfterListSelectDto = tbUserService.list(params);

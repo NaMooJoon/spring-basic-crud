@@ -26,6 +26,12 @@ public class TbCmtDto {
         @Schema(description = "id", example = "length32textNumber")
         private String id;
 
+        @Schema(description = "authorId", example = "length32textNumber")
+        private String tbUserId;
+
+        @Schema(description = "nick", example = "author nick name")
+        private String nick;
+
         @Schema(description = "content", example = "contents ...")
         @Size(max = 300)
         private String content;
@@ -40,6 +46,9 @@ public class TbCmtDto {
 
         @Schema(description = "tbBoardId", example = "Board id")
         private String tbBoardId;
+
+        @Schema(description = "nick", example = "author nick name")
+        private String nick;
 
         @Schema(description = "content", example = "contents ...")
         private String content;
@@ -79,6 +88,12 @@ public class TbCmtDto {
         @Size(max = 100)
         private String tbBoardId;
 
+        @Schema(description = "tbUserId", example = "author user id")
+        private String tbUserId;
+
+        @Schema(description = "nick", example = "author user nick name")
+        private String nick;
+
         @Schema(description = "content", example = "contents ...")
         @NotNull
         @NotEmpty
@@ -86,7 +101,7 @@ public class TbCmtDto {
         private String content;
 
         public TbComment toEntity() {
-            return TbComment.of(tbBoardId, content);
+            return TbComment.of(tbBoardId, content, tbUserId, nick);
         }
     }
 
@@ -149,6 +164,8 @@ public class TbCmtDto {
     @Getter
     @Setter
     @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class TbCmtUpdateDto {
 
         @Schema(description = "id", example = "length32textnumber")

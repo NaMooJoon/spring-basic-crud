@@ -60,7 +60,7 @@ public class TbBoardRestController {
                     + "@param TbBoardCreateRequestDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbBoardUpdateResponseDto\\> <<br />"
                     + "@exception 중복 <br />")
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("")
     public ResponseEntity<TbBoardUpdateResponseDto> update(@RequestBody TbBoardUpdateRequestDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbBoardService.update(params));

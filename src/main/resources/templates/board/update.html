@@ -48,6 +48,10 @@
     $.ajax({
         url: `/api/board/[[${id}]]`,
         type: "GET",
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+        },
         contentType: 'application/json; charset=utf-8',
         cache: false,
         success: (data, status, xhr) => {
@@ -56,7 +60,7 @@
             document.getElementById("update_deleted").checked = (data.deleted == "N")? false : true;
         },
         error: (data) => {
-            alert(data);
+            alert(JSON.stringify(data));
         },
     })
 
@@ -70,6 +74,10 @@
         $.ajax({
             url: "/api/board",
             type: "PUT",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+            },
             contentType: 'application/json; charset=utf-8',
             data: JSON.stringify({
                 'id': `[[${id}]]`,
@@ -82,9 +90,46 @@
                 alert("data : " + JSON.stringify(data));
             },
             error: (data) => {
-                alert(data);
+                alert(JSON.stringify(data));
+                switch (data.status) {
+                    case 403:
+                        access_token();
+                        break;
+                }
             },
         });
+    }
+
+    function access_token() {
+        $.ajax({
+            url: "/api/auth/access-token",
+            method: "POST",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Content-type", "application/json");
+                xhr.setRequestHeader("RefreshToken", localStorage.getItem("refreshToken"));
+            },
+            cache: false,
+            success: (data, status, xhr) => {
+                switch (xhr.status) {
+                    case 200:
+                        let accessToken = xhr.getResponseHeader("Authorization");
+                        alert(accessToken);
+                        localStorage.setItem("accessToken", accessToken);
+                        break;
+                    default:
+                        console.log("no matching status code...")
+                }
+            },
+            error: (data) => {
+                alert(JSON.stringify(data));
+                switch (data.status) {
+                    case 401:
+                        alert("Refresh Token이 만료되어 login창으로 이동합니다.");
+                        window.location = "/user/login";
+                        break;
+                }
+            }
+        })
     }
 </script>
 </body>

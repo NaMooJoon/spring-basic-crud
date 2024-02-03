@@ -71,7 +71,8 @@
                 <thead>
                 <tr>
                     <th style="width: 5%">Index</th>
-                    <th style="width: 75%">Contents</th>
+                    <th style="width: 10%">Author</th>
+                    <th style="width: 65%">Contents</th>
                     <th style="width: 10%">At</th>
                     <th style="width: 5%">-</th>
                     <th style="width: 5%">-</th>
@@ -152,6 +153,10 @@
             $.ajax({
                 url: "/api/cmt",
                 type: "POST",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Content-type", "application/json");
+                    xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+                },
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
                     'tbBoardId': tb_board_id,
@@ -162,7 +167,13 @@
                     callComments();
                 },
                 error: (data) => {
-                    alert(data);
+                    alert(JSON.stringify(data));
+                    switch (data.status) {
+                        case 403:
+                            alert('다시 시도하십시오.');
+                            access_token();
+                            break;
+                    }
                 },
             });
         }
@@ -174,6 +185,10 @@
             $.ajax({
                 url: "/api/cmt",
                 type: "PUT",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Content-type", "application/json");
+                    xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+                },
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
                     'id': cmt_id,
@@ -185,7 +200,13 @@
                     callComments();
                 },
                 error: (data) => {
-                    alert(data);
+                    alert(JSON.stringify(data));
+                    switch (data.status) {
+                        case 403:
+                            alert('다시 시도하십시오.');
+                            access_token();
+                            break;
+                    }
                 },
             });
         }
@@ -194,6 +215,10 @@
             $.ajax({
                 url: "/api/cmt",
                 type: "DELETE",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Content-type", "application/json");
+                    xhr.setRequestHeader("Authorization", localStorage.getItem("accessToken"));
+                },
                 contentType: 'application/json; charset=utf-8',
                 data: JSON.stringify({
                     'id': cmt_id,
@@ -203,7 +228,13 @@
                     callComments();
                 },
                 error: (data) => {
-                    alert(data);
+                    alert(JSON.stringify(data));
+                    switch (data.status) {
+                        case 403:
+                            alert('다시 시도하십시오.');
+                            access_token();
+                            break;
+                    }
                 },
             });
         }
@@ -220,11 +251,13 @@
                 }),
                 cache: false,
                 success: (data) => {
+                    console.log(JSON.stringify(data));
                     let tableBodyStr = "";
                     for (let i = 0; i < data.length; i++) {
                         let cmt_id = "" + data[i].id;
                         tableBodyStr += "<tr>" +
                             `<td style='text-align: center'>${i + 1}</tda>` +
+                            `<td>${data[i].nick+ ''}</td>` +
                             `<td>
                                 <div id='cmt-${i + 1}'>${data[i].content}</div>
                                 <div style='display: none' id='cmt-input-${i + 1}'><input id='cmt-content-${i + 1}' value='${data[i].content}' /></div>
@@ -238,6 +271,7 @@
                                 <button id="btn-delete-${i + 1}">Delete</button>
                             </td>`
                             "</tr>";
+                        console.log(`${i + 1} 번째 ${cmt_id}`);
                     }
                     $('#comment_body').html(tableBodyStr);
                     for (let i = 0; i < data.length; i++) {
@@ -262,6 +296,37 @@
             $('#cmt-input-' + idx).show();
         }
 
+        function access_token() {
+            $.ajax({
+                url: "/api/auth/access-token",
+                method: "POST",
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Content-type", "application/json");
+                    xhr.setRequestHeader("RefreshToken", localStorage.getItem("refreshToken"));
+                },
+                cache: false,
+                success: (data, status, xhr) => {
+                    switch (xhr.status) {
+                        case 200:
+                            let accessToken = xhr.getResponseHeader("Authorization");
+                            alert(accessToken);
+                            localStorage.setItem("accessToken", accessToken);
+                            break;
+                        default:
+                            console.log("no matching status code...")
+                    }
+                },
+                error: (data) => {
+                    alert(JSON.stringify(data));
+                    switch (data.status) {
+                        case 401:
+                            alert("Refresh Token이 만료되어 login창으로 이동합니다.");
+                            window.location = "/user/login";
+                            break;
+                    }
+                }
+            })
+        }
     </script>
 </body>
 </html>

@@ -1,7 +1,13 @@
 package com.spring.crud.dto.common;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommonSelectDto {
     @Schema(description = "id", example = "데이블 pk")
     private String id;

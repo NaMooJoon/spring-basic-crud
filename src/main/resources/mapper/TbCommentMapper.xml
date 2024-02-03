@@ -9,6 +9,7 @@
             , tb_comment.deleted
             , tb_comment.created_at AS createdAt
             , tb_comment.modified_at AS modifiedAt
+            , tb_comment.nick
         FROM tb_comment
         WHERE tb_comment.id = ${id}
     </select>
@@ -20,6 +21,7 @@
              , tb_comment.deleted
              , tb_comment.created_at AS createdAt
              , tb_comment.modified_at AS modifiedAt
+             , tb_comment.nick
         FROM tb_comment
         WHERE tb_comment.id is not null
         <if test="tbBoardId != null and tbBoardId != ''">AND tb_comment.tb_board_id = #{tbBoardId} </if>

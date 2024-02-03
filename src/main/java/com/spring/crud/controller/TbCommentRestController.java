@@ -7,12 +7,15 @@ import com.spring.crud.dto.TbCmtDto.TbCmtCreateDto;
 import com.spring.crud.dto.TbCmtDto.TbCmtDeleteDto;
 import com.spring.crud.dto.TbCmtDto.TbCmtListDto;
 import com.spring.crud.dto.TbCmtDto.TbCmtUpdateDto;
+import com.spring.crud.security.PrincipalDetails;
 import com.spring.crud.service.TbCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,8 +39,13 @@ public class TbCommentRestController {
                     + "@param TbCmtCreateDto <br />"
                     + "@return HttpStatus.CREATED(201) ResponseEntity\\<TbCmtAfterCreateDto\\> <<br />"
                     + "@exception 중복 <br />")
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("")
-    public ResponseEntity<TbCmtAfterCreateDto> create(@RequestBody TbCmtCreateDto params) {
+    public ResponseEntity<TbCmtAfterCreateDto> create(@RequestBody TbCmtCreateDto params, @AuthenticationPrincipal
+                                                      PrincipalDetails principalDetails) {
+        System.out.println("comment 생성 시작");
+        params.setTbUserId(principalDetails.getTbUser().getId());
+        params.setNick(principalDetails.getTbUser().getNick());
         return ResponseEntity.status(HttpStatus.CREATED).body(tbCommentService.create(params));
     }
 
@@ -46,8 +54,10 @@ public class TbCommentRestController {
                     + "@param TbCmtUpdateDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbCmtAfterUpdateDto\\> <<br />"
                     + "@exception 중복 <br />")
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("")
     public ResponseEntity<TbCmtAfterUpdateDto> update(@RequestBody TbCmtUpdateDto params) {
+
         return ResponseEntity.status(HttpStatus.OK).body(tbCommentService.update(params));
     }
 
@@ -56,6 +66,7 @@ public class TbCommentRestController {
                     + "@param TbCmtDeleteDto <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<TbCmtAfterDeleteDto\\> <<br />"
                     + "@exception 중복 <br />")
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
     public ResponseEntity<TbCmtAfterUpdateDto> delete(@RequestBody TbCmtDeleteDto params) {
         return ResponseEntity.status(HttpStatus.OK).body(tbCommentService.delete(params));
@@ -66,6 +77,7 @@ public class TbCommentRestController {
                     + "@param (TbCmtListDto) <br />"
                     + "@return HttpStatus.OK(200) ResponseEntity\\<List<TbCmtAfterSelectDto>\\> <br />"
                     + "@exception (no exception) <br />")
+    @PreAuthorize("permitAll()")
     @PostMapping("/list")
     public ResponseEntity<List<TbCmtAfterSelectDto>> list(@RequestBody TbCmtListDto params) {
         List<TbCmtAfterSelectDto> tbCmtAfterSelectDtoList = tbCommentService.list(params);

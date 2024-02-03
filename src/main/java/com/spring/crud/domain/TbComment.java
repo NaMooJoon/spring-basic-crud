@@ -23,20 +23,28 @@ public class TbComment extends AuditingFields {
     private String tbBoardId; // Board pk
     @Column(nullable = false, length = 10_000)
     private String content;
+    @Column(nullable = false)
+    private String tbUserId; // User pk
+    @Column(nullable = false)
+    private String nick; // User nick name
 
     protected TbComment() {}
-    private TbComment(String tbBoardId, String content) {
+    private TbComment(String tbBoardId, String content, String tbUserId, String nick) {
         this.tbBoardId = tbBoardId;
         this.content = content;
+        this.tbUserId = tbUserId;
+        this.nick = nick;
     }
 
-    public static TbComment of(String tbBoardId, String content) {
-        return new TbComment(tbBoardId, content);
+    public static TbComment of(String tbBoardId, String content, String tbUserId, String nick) {
+        return new TbComment(tbBoardId, content, tbUserId, nick);
     }
 
     public TbCmtAfterCreateDto toAfterCreateDto() {
         return TbCmtAfterCreateDto.builder()
                 .id(super.getId())
+                .tbUserId(tbUserId)
+                .nick(nick)
                 .content(content)
                 .build();
     }
