@@ -1,9 +1,13 @@
 package com.spring.crud.service.impl;
 
+import com.amazonaws.services.cloudtrail.model.InvalidTokenException;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.spring.crud.dto.RefreshTokenDto;
+import com.spring.crud.dto.RefreshTokenDto.RefreshTokenCreateDto;
+import com.spring.crud.repository.RefreshTokenRepository;
 import com.spring.crud.security.ExternalProperties;
 import com.spring.crud.security.JwtTokenDto;
 import com.spring.crud.service.AuthService;
@@ -16,10 +20,12 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final ExternalProperties externalProperties;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
-    public AuthServiceImpl(ExternalProperties externalProperties) {
+    public AuthServiceImpl(ExternalProperties externalProperties, RefreshTokenRepository refreshTokenRepository) {
         this.externalProperties = externalProperties;
+        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override
@@ -64,12 +70,16 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public String createRefreshToken(String tbUserId) {
+        // refreshToken 이전 것들 모두 지우기 (이렇게 함으로써 다른 device에서 새롭게 로그인하는 경우, 기존의 로그인 되어 있던 device에서는 refresh 토큰을 사용할 수 없게 된다.)
+        refreshTokenRepository.deleteAllByTbUserId(tbUserId);
+
         String refreshToken = JWT.create()
                 .withSubject("refreshToken")
                 .withClaim("id", tbUserId)
                 .withExpiresAt(new Date(System.currentTimeMillis() + externalProperties.getRefreshTokenExpirationTime()))
                 .sign(getTokenAlgorithm());
         // DB or Redis ...
+        refreshTokenRepository.save(new RefreshTokenCreateDto(tbUserId, refreshToken).toEntity());
         return refreshToken;
     }
 
@@ -78,7 +88,9 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public String verifyRefreshToken(String refreshToken) throws JWTVerificationException {
-//        refreshToken = refreshToken.substring(12, refreshToken.length());
+        refreshTokenRepository.findByContent(refreshToken)
+                .orElseThrow(() -> new InvalidTokenException("No such refresh token in DB"));
+
         return JWT.require(getTokenAlgorithm())
                 .build()
                 .verify(refreshToken)

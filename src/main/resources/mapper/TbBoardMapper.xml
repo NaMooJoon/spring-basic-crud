@@ -33,6 +33,7 @@
         , tb_board.created_at AS createdAt
         , tb_board.modified_at AS modifiedAt
         , tb_board.tb_user_id AS tbUserId
+        , IF(tb_user.deleted = 'Y', '(정보없음)', tb_user.nick) as author
         , tb_user.nick AS author
         FROM tb_board, tb_user
         WHERE tb_board.id is not null
