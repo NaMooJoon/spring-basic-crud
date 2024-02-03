@@ -64,12 +64,18 @@
       sendMsg($("#ws_msg").val() + "");
     }
     function sendMsg(message) {
-      stompClient.send("/ws/send", {}, message);
+      let accessToken = localStorage.getItem("accessToken") + "";
+      let _data = JSON.stringify({
+        'message': message,
+        'accessToken': accessToken,
+      });
+      stompClient.send("/ws/send", {}, _data);
       //stompClient.send("/ws/send", {}, JSON.stringify({'name': $("#name").val()}));
     }
 
-    function addMsg(message) {
-      $("#tbody_msg").append("<tr><td>" + message + "</td></tr>");
+    function addMsg(data) {
+      let _data = JSON.parse(data);
+      $("#tbody_msg").append("<tr><td>" + _data.sender_nick + "</td><td>" + _data.message + "</td></tr>");
     }
   </script>
 </head>

@@ -4,7 +4,7 @@
 
     <select id="detail" parameterType="hashMap" resultType="com.spring.crud.dto.TbUserDto$TbUserAfterSelectDto">
         SELECT tb_user.id
-             ,tb_user.uid
+             ,tb_user.username
              ,tb_user.nick
              ,tb_user.join_from AS joinFrom
              ,tb_user.name
@@ -29,7 +29,7 @@
             ,tb_user.created_at AS createdAt
         FROM tb_user
         WHERE tb_user.id is not null
-        <if test="uid != null and uid != ''">AND tb_user.uid LIKE CONCAT('%', #{uid}, '%')</if>
+        <if test="username != null and username != ''">AND tb_user.usernameLIKE CONCAT('%', #{username}, '%')</if>
         <if test="joinFrom != null and joinFrom != ''"> AND tb_user.join_from=#{joinFrom}</if>
         <if test="nick != null and nick != ''">AND tb_user.nick LIKE CONCAT('%', #{nick}, '%')</if>
         <if test="name != null and name != ''">AND tb_user.name LIKE CONCAT('%', #{name}, '%')</if>
