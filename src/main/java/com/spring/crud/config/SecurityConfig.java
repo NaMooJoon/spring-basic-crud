@@ -7,6 +7,7 @@ import com.spring.crud.security.FilterExceptionHandlerFilter;
 import com.spring.crud.security.JwtAuthenticationFilter;
 import com.spring.crud.security.JwtAuthorizationFilter;
 import com.spring.crud.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,10 +20,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+@RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
     private final TbUserRepository tbUserRepository;
     private final CorsFilterConfiguration corsFilterConfiguration;
@@ -30,23 +35,32 @@ public class SecurityConfig {
     private final AuthService authService;
     private final ExternalProperties externalProperties;
 
-    public SecurityConfig(TbUserRepository tbUserRepository, CorsFilterConfiguration corsFilterConfiguration,
-                          ObjectMapper objectMapper, AuthService authService, ExternalProperties externalProperties) {
-        this.tbUserRepository = tbUserRepository;
-        this.corsFilterConfiguration = corsFilterConfiguration;
-        this.objectMapper = objectMapper;
-        this.authService = authService;
-        this.externalProperties = externalProperties;
-    }
-
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Spring security 권한 설정
-     */
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        http
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll())
+                .logout(auth -> auth
+                        .permitAll()
+                        .logoutSuccessUrl("/user/login"))
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(customOAuth2UserService))
+                        .successHandler(oAuth2AuthenticationSuccessHandler));
+
+        return http.build();
+    }
+
+    /* 교수님 버전
+    // Spring security 권한 설정
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -59,7 +73,7 @@ public class SecurityConfig {
 
         return httpSecurity.build();
     }
-
+    */
     public class CustomDsl extends AbstractHttpConfigurer<CustomDsl, HttpSecurity> {
 
         /**
@@ -82,5 +96,4 @@ public class SecurityConfig {
         }
 
     }
-
 }

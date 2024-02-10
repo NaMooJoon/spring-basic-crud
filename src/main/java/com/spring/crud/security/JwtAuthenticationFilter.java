@@ -78,7 +78,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         // TbUserId로 리프레시토큰 발급
-        String refreshToken = authService.createRefreshToken(principalDetails.getTbUser().getId());
+        String refreshToken = authService.createRefreshToken(principalDetails.getTbUser().getUsername());
         JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
         System.out.println("jwtTokenDto = " + jwtTokenDto.getAccessToken());
 

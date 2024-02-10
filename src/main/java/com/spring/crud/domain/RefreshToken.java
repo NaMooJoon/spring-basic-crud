@@ -11,20 +11,20 @@ import lombok.Setter;
 
 @Getter
 @Table(indexes = {
-        @Index(columnList = "tbUserId"),
+        @Index(columnList = "username"),
 })
 @Entity
 public class RefreshToken extends AuditingFields {
 
     @Column(nullable = false)
-    private String tbUserId;
+    private String username;
 
     @Column(nullable = false, length = 2_000)
     private String content;
 
     protected RefreshToken() {}
-    private RefreshToken(String tbUserId, String content) {
-        this.tbUserId = tbUserId;
+    private RefreshToken(String username, String content) {
+        this.username = username;
         this.content = content;
     }
 

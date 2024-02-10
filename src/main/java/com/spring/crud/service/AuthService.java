@@ -9,11 +9,11 @@ public interface AuthService {
 
     Algorithm getTokenAlgorithm();
 
-    String createAccessToken(String tbUserId);
+    String createAccessToken(String username);
 
     String verifyAccessToken(String accessToken) throws JWTVerificationException;
 
-    String createRefreshToken(String tbUserId);
+    String createRefreshToken(String username);
 
     String verifyRefreshToken(String refreshToken) throws JWTVerificationException;
 

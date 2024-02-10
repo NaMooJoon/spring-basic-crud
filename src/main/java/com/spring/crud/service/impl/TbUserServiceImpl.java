@@ -16,8 +16,9 @@ import com.spring.crud.mapper.TbUserMapper;
 import com.spring.crud.repository.RoleTypeRepository;
 import com.spring.crud.repository.TbUserRepository;
 import com.spring.crud.repository.TbUserRoleTypeRepository;
+import com.spring.crud.security.JwtTokenDto;
+import com.spring.crud.service.AuthService;
 import com.spring.crud.service.TbUserService;
-import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,25 +33,46 @@ public class TbUserServiceImpl implements TbUserService {
     private final TbUserRoleTypeRepository tbUserRoleTypeRepository;
     private final TbUserMapper tbUserMapper;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthService authService;
 
     @Autowired
-    public TbUserServiceImpl(TbUserRepository tbUserRepository, RoleTypeRepository roleTypeRepository,
-                             TbUserRoleTypeRepository tbUserRoleTypeRepository, TbUserMapper tbUserMapper,
-                             BCryptPasswordEncoder bCryptPasswordEncoder) {
+    public TbUserServiceImpl(
+            TbUserRepository tbUserRepository,
+            RoleTypeRepository roleTypeRepository,
+            TbUserRoleTypeRepository tbUserRoleTypeRepository,
+            TbUserMapper tbUserMapper,
+            BCryptPasswordEncoder bCryptPasswordEncoder,
+            AuthService authService
+    ) {
         this.tbUserRepository = tbUserRepository;
         this.roleTypeRepository = roleTypeRepository;
         this.tbUserRoleTypeRepository = tbUserRoleTypeRepository;
         this.tbUserMapper = tbUserMapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.authService = authService;
+    }
+
+    public JwtTokenDto sns(TbUserCreateDto params) {
+        TbUser tbUser = tbUserRepository.findByUsername(params.getUsername())
+                .orElse(null);
+        if (tbUser == null) {
+            String nick = "User" + UUID.randomUUID().toString().substring(0, 4);
+            params.setNick(nick);
+            create(params);
+            tbUser = tbUserRepository.findByUsername(params.getUsername())
+                    .orElseThrow(() -> new RuntimeException("sns login problem"));
+        }
+        String refreshToken = authService.createRefreshToken(tbUser.getUsername());
+        JwtTokenDto jwtTokenDto = authService.issueAccessToken(refreshToken);
+        jwtTokenDto.setRefreshToken(refreshToken);
+        return jwtTokenDto;
     }
 
     @Override
     public TbUserAfterCreateDto signup(TbUserCreateDto params) {
         // check duplicated user
-        TbUser user = tbUserRepository.findByUsername(params.getUsername());
-        if (user != null) {
-            throw new AlreadyExistDataException("Username already exist!");
-        }
+        TbUser user = tbUserRepository.findByUsername(params.getUsername())
+                .orElseThrow(() -> new AlreadyExistDataException("Username already exist!"));
 
         String nick = "User" + UUID.randomUUID().toString().substring(0, 4);
         params.setNick(nick);

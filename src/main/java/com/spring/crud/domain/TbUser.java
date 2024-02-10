@@ -12,14 +12,19 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import net.minidev.json.annotate.JsonIgnore;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString(callSuper = true)
 @Table(
         indexes = {
@@ -50,7 +55,6 @@ public class TbUser extends AuditingFields {
     @Column(nullable = true)
     private String process;
 
-
     @Column(nullable = true)
     private String name;
 
@@ -71,16 +75,6 @@ public class TbUser extends AuditingFields {
             return tbUserRoleType;
         }
         return new ArrayList<>();
-    }
-
-    protected TbUser() {}
-    @Builder
-    private TbUser(String username, String password, String nick, String joinFrom, String process) {
-        this.username = username;
-        this.password = password;
-        this.nick = nick;
-        this.joinFrom = joinFrom;
-        this.process = process;
     }
 
     public TbUserAfterCreateDto toAfterCreateDto() {

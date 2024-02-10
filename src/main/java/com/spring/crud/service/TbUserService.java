@@ -7,9 +7,12 @@ import com.spring.crud.dto.TbUserDto.TbUserAfterUpdateDto;
 import com.spring.crud.dto.TbUserDto.TbUserCreateDto;
 import com.spring.crud.dto.TbUserDto.TbUserListSelectDto;
 import com.spring.crud.dto.TbUserDto.TbUserUpdateDto;
+import com.spring.crud.security.JwtTokenDto;
 import java.util.List;
 
 public interface TbUserService {
+    JwtTokenDto sns(TbUserCreateDto params);
+
     TbUserAfterCreateDto signup(TbUserCreateDto params);
 
     TbUserAfterCreateDto create(TbUserCreateDto params);

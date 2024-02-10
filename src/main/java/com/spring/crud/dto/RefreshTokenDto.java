@@ -62,8 +62,8 @@ public class RefreshTokenDto {
     @AllArgsConstructor
     public static class RefreshTokenCreateDto {
 
-        @Schema(description = "tbUserId", example = "author user id")
-        private String tbUserId;
+        @Schema(description = "username", example = "author username")
+        private String username;
 
         @Schema(description = "content", example = "contents ...")
         @NotNull
@@ -72,7 +72,7 @@ public class RefreshTokenDto {
         private String content;
 
         public RefreshToken toEntity() {
-            return RefreshToken.of(tbUserId, content);
+            return RefreshToken.of(username, content);
         }
     }
 
@@ -90,67 +90,4 @@ public class RefreshTokenDto {
         private String id;
     }
 
-    @Builder
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class RefreshTokenListDto {
-
-        @Schema(description = "content", example="content")
-        private String content;
-        @Schema(description = "tbUserId", example = "user id")
-        private String tbUserId;
-        @Schema(description = "deleted", example="N")
-        private String deleted;
-    }
-
-    @Builder
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class RefreshTokenPagedListDto extends CommonPagedListRequestDto {
-        @Schema(description = "tbUserId", example = "user id")
-        private String tbUserId;
-        @Schema(description = "content", example="content")
-        private String content;
-        @Schema(description = "deleted", example="N")
-        private String deleted;
-    }
-
-    @Builder
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class RefreshTokenScrollListDto extends CommonScrollListRequestDto {
-        @Schema(description = "tbUserId", example = "user id")
-        private String tbUserId;
-        @Schema(description = "content", example="content")
-        private String content;
-        @Schema(description = "deleted", example="N")
-        private String deleted;
-    }
-
-    @Getter
-    @Setter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class RefreshTokenUpdateDto {
-
-        @Schema(description = "id", example = "length32textnumber")
-        @NotNull
-        @NotEmpty
-        @Size(max = 32)
-        private String id;
-
-        @Schema(description = "deleted", example = "Y")
-        private String deleted;
-
-        @Schema(description = "content", example = "contents ...")
-        @Size(max = 300)
-        private String content;
-    }
 }

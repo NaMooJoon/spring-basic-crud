@@ -37,13 +37,13 @@ public class AuthServiceImpl implements AuthService {
      * Access Token 생성을 위한 함수
      * Payload에 tbUser Id를 담는다.
      *
-     * @param tbUserId
+     * @param username
      */
     @Override
-    public String createAccessToken(String tbUserId) {
+    public String createAccessToken(String username) {
         return JWT.create()
                 .withSubject("accessToken")
-                .withClaim("id", tbUserId)
+                .withClaim("id", username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + externalProperties.getAccessTokenExpirationTime()))
                 .sign(getTokenAlgorithm());
     }
@@ -64,22 +64,22 @@ public class AuthServiceImpl implements AuthService {
      * Refresh Token 생성을 위한 함수
      * Payload에 tbuser id를 담는다.
      * DB(Redis)에 저장할 수도 있음.
-     * Redis에 저장하는 경우, tbUserId를 key로, 발급한 token을 value로 저장
-     * @param tbUserId
+     * Redis에 저장하는 경우, username를 key로, 발급한 token을 value로 저장
+     * @param username
      * @return
      */
     @Override
-    public String createRefreshToken(String tbUserId) {
+    public String createRefreshToken(String username) {
         // refreshToken 이전 것들 모두 지우기 (이렇게 함으로써 다른 device에서 새롭게 로그인하는 경우, 기존의 로그인 되어 있던 device에서는 refresh 토큰을 사용할 수 없게 된다.)
-        refreshTokenRepository.deleteAllByTbUserId(tbUserId);
+        refreshTokenRepository.deleteAllByUsername(username);
 
         String refreshToken = JWT.create()
                 .withSubject("refreshToken")
-                .withClaim("id", tbUserId)
+                .withClaim("id", username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + externalProperties.getRefreshTokenExpirationTime()))
                 .sign(getTokenAlgorithm());
         // DB or Redis ...
-        refreshTokenRepository.save(new RefreshTokenCreateDto(tbUserId, refreshToken).toEntity());
+        refreshTokenRepository.save(new RefreshTokenCreateDto(username, refreshToken).toEntity());
         return refreshToken;
     }
 
@@ -104,8 +104,8 @@ public class AuthServiceImpl implements AuthService {
      */
     @Override
     public JwtTokenDto issueAccessToken(String refreshToken) throws JWTVerificationException {
-        String tbUserId = verifyRefreshToken(refreshToken); // 발행 전 검증
-        String accessToken = createAccessToken(tbUserId); // 발행
+        String username = verifyRefreshToken(refreshToken); // 발행 전 검증
+        String accessToken = createAccessToken(username); // 발행
 
         return JwtTokenDto.builder()
                 .accessToken(accessToken)

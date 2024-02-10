@@ -23,10 +23,8 @@ public class PrincipalDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        TbUser tbUser = tbUserRepository.findByUsername(username);
-        if (tbUser == null) {
-            throw new NoMatchedDataException("username : " + username);
-        }
+        TbUser tbUser = tbUserRepository.findByUsername(username)
+                .orElseThrow(() -> new NoMatchedDataException("username : " + username));
         return new PrincipalDetails(tbUser);
     }
 
